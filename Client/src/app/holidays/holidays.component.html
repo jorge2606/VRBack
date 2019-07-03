@@ -1,0 +1,117 @@
+<div *ngIf="holidaysCreate" class="d-inline-block mb-1">
+  <a
+    href="" 
+    class="btn btn-success ml-2" 
+    routerLink="/holidays/create">
+    <fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+  </a>
+</div>
+
+
+<div class="d-inline-block mb-1">
+    <label class="d-inline-block ml-2 mr-1" for="">Fecha </label>
+    <div class="d-inline-block mr-1">
+        <form class="form-inline">
+            <div class="form-group">
+              <div class="input-group">
+                <input 
+                  (dateSelect)="filter()"
+                  (keyup)="filter()"
+                  class="form-control" 
+                  placeholder="dd/mm/yyyy"
+                  name="dp" 
+                  [readonly]="true"
+                  type="text"
+                  displayMonths="displayMonths" 
+                  navigation="navigation" 
+                  outsideDays="outsideDays" 
+                  showWeekNumbers="showWeekNumbers"
+                  ngbDatepicker 
+                  #d="ngbDatepicker" 
+                  [(ngModel)]="filters.date"
+                  >
+                <div class="input-group-append">
+                  <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                      <fa-icon icon="calendar-alt"></fa-icon>
+                  </button>
+                </div>
+                <div class="input-group-append">
+                    <button
+                        placement="right"
+                        ngbTooltip="Limpiar"
+                        class="btn btn-outline-secondary calendar" (click)="clear()" type="button">
+                        <fa-icon icon="eraser"></fa-icon>
+                    </button>
+                  </div>
+              </div>            
+            </div>
+            
+            <div class="w-100"></div>
+
+            <div *ngIf="errorDatapicker" class="alert alert-danger mt-1">
+                <label for="">
+                    {{errorDatapicker}}
+                </label>
+            </div>
+          </form>
+    </div>
+
+    <label class="d-inline-block mt-2 ml-1" for="">Descripción </label>
+    <div class="d-inline-block ml-1 mr-1">
+      <input (keyup)="filter()" [(ngModel)]="filters.description" type="text" class="form-control">
+    </div>
+</div>
+
+  <div class="p-2" style="min-height: 300px;">
+    <table class="table table-striped">
+      <thead>
+        <tr style="font-weight: bold;">
+          <td>Fecha</td>
+          <td>Descripción</td>  
+          <td></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let holiday of holidays">
+          <td>{{holiday.date.day}}/{{holiday.date.month}}/{{holiday.date.year}}</td>
+          <td>{{holiday.description}}</td>
+          <td class="text-right">
+            <div class="btn-group" role="group" aria-label="Basic example">
+              <a 
+                *ngIf="holidaysEdit"
+                placement="bottom" 
+                ngbTooltip="Editar" 
+                class="pr-3" 
+                routerLink="/holidays/update/{{holiday.id}}">
+                <fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+              </a>
+              <a
+              *ngIf="holidaysDelete"
+                placement="bottom" 
+                ngbTooltip="Eliminar"  
+                class="pr-3"              
+                routerLink="/holidays" (click)="openEliminar(holiday)">
+                <fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+              </a>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    
+      <app-alert 
+        *ngIf="col_size == 0"
+        [textAlert]="textListEmpty"
+        [typeAlert]="classListEmpty">			
+    </app-alert>
+  </div>
+  
+  <ngb-pagination 
+    *ngIf="col_size >= (itemsPerPage + 1)"
+    (pageChange)="loadPage($event)"
+    [collectionSize]="col_size" 
+    [pageSize]="itemsPerPage"
+    [(page)]="page"
+    aria-label="Default pagination">
+  </ngb-pagination>
+

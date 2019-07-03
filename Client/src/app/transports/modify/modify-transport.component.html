@@ -1,0 +1,122 @@
+<a  class="fa-lg"
+    placement="bottom" ngbTooltip="Volver al listado de transportes"  
+    style="margin-left : 5px;" class="btn btn-primary" href="" routerLink="/transport">
+  <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+<div class="container col-md-6">
+    <div class="card">
+        <h5 class="card-header">Nuevo</h5>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #TransportForm="ngForm">
+            
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [(ngModel)]="modelTransport.type" 
+                        required 
+                        [ngClass]="{ 'is-invalid': (type.dirty || TransportForm.submitted) && type.invalid,
+                        'is-valid' : type.valid}"
+                        #type="ngModel" 
+                        name="type" 
+                        type="text" 
+                        placeholder="Tipo">
+                </div>
+            
+                <div *ngIf="type.dirty && !TransportForm.submitted && type.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="type.errors.required">
+                        El campo 'Tipo' no debería estar vacío
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [(ngModel)]="modelTransport.brand" 
+                        required 
+                        [ngClass]="{ 'is-invalid': (brand.dirty || TransportForm.submitted) && brand.invalid,
+                        'is-valid' : brand.valid}"
+                        #brand="ngModel" 
+                        name="brand" 
+                        type="text" 
+                        placeholder="Marca">
+                </div>
+            
+                <div *ngIf="brand.dirty && !TransportForm.submitted && brand.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="brand.errors.required">
+                        El campo 'Marca' no debería estar vacío
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [(ngModel)]="modelTransport.model" 
+                        #model="ngModel"
+                        [ngClass]="{ 'is-invalid': (model.dirty || TransportForm.submitted) && model.invalid,
+                        'is-valid' : model.valid}"
+                        required 
+                        name="model" 
+                        type="text" 
+                        placeholder="Modelo">
+                </div>
+            
+                <div *ngIf="model.dirty && !TransportForm.submitted && model.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="model.errors.required">
+                        El campo 'Modelo' no debería estar vacío
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [(ngModel)]="modelTransport.carPlate" 
+                        required 
+                        [ngClass]="{ 'is-invalid': (carPlate.dirty || TransportForm.submitted) && carPlate.invalid,
+                        'is-valid' : carPlate.valid}"
+                        #carPlate="ngModel" 
+                        name="carPlate" 
+                        type="text" 
+                        placeholder="Patente">
+                </div>
+            
+                <div *ngIf="carPlate.dirty && !TransportForm.submitted && carPlate.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="carPlate.errors.required">
+                        El campo 'Patente' no debería estar vacío
+                    </div>
+                </div>
+            
+                <div class="form-row">
+                    <button 
+                        placement="bottom" 
+                        ngbTooltip="Enviar este formulario" 
+                        [disabled]="!TransportForm.valid" 
+                        class="btn btn-success ml-auto">
+                        <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                    </button>
+                </div>
+            
+            </form>
+    
+    <div class="alert alert-danger" *ngIf="error">
+        <ul *ngFor="let e of error">
+            <li>{{e.value}}</li>
+        </ul>
+    </div>
+    
+    <!--<div class="alert alert-success" *ngIf="responseSuccess">
+        <ul>
+            <li>Guardado</li>
+        </ul>
+    </div>-->
+
+    </div>
+    </div>
+
+</div>
+
+

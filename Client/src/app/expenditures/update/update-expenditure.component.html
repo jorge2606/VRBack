@@ -1,0 +1,105 @@
+<a  style="margin-left : 5px;" class="btn btn-primary navarStyle" href="" routerLink="/expenditure">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+<div class="container col-md-6">
+    <div class="card">
+            <h5 class="card-header">Modificar</h5>
+            <div class="card-body">
+                <form (ngSubmit)="onSubmit()" #CategoryForm="ngForm">
+            
+                    <div class="form-group mb-2">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.name" 
+                            [ngClass]="{ 'is-invalid': (name.dirty || CategoryForm.submitted) && name.invalid,
+                            'is-valid' : name.dirty && name.valid}"
+                            #name="ngModel" 
+                            required 
+                            name="name" 
+                            type="text"
+                            placeholder="Nombre">
+                    </div>
+                
+                    <div *ngIf="name.dirty && !CategoryForm.submitted && name.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="name.errors.required">
+                            El campo 'Nombre' no debería estar vacío
+                        </div>
+                    </div>
+                    
+                    <div class="form-group mb-2">
+                        <input 
+                            *ngIf="model.outsideProvince"
+                            class="form-control col-md-2 text-right"
+                            [ngClass]="{'is-invalid': (!percentageValid && onLoadPercentege), 'is-valid' : (percentageValid && onLoadPercentege),'is-onload' : !onLoadPercentege}"
+                            [ngModel]="model.percentage"
+                            (ngModelChange)="changePercentage($event)"
+                            type="text"
+                            placeholder="Porcentaje"
+                            name="percentage"
+                            mask="0.00"
+                            pattern="0.[1-9]{2}|1.00"
+                            sufix="%"
+                            [showMaskTyped]="true"
+                            #percentage="ngModel"
+                            required
+                        >
+                    </div>
+                    <!-- <div *ngIf="percentage.dirty && !CategoryForm.submitted && percentage.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="percentage.errors.required">
+                            El campo 'Porcentaje' no debería estar vacío
+                        </div>
+                    </div> -->
+
+                    <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" 
+                                class="custom-control-input" 
+                                id="canRepeat"
+                                [(ngModel)]="model.canRepeat"
+                                name="canRepeat"
+                                #canRepeat="ngModel">
+                            <label class="custom-control-label" for="canRepeat">Puede repetirse dentro de una comisión de viáticos.</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mr-sm-2">
+                            <input type="checkbox" 
+                                class="custom-control-input" 
+                                id="isImportant"
+                                [(ngModel)]="model.isImportant"
+                                name="isImportant"
+                                #isImportant="ngModel">
+                            <label class="custom-control-label" for="isImportant">Este gasto es poco frecuente y debe alertarse.</label>
+                    </div>
+
+                    <div class="custom-control custom-checkbox mr-sm-2">
+                        <input type="checkbox" 
+                            class="custom-control-input" 
+                            id="outsideProvince"
+                            [ngModel]="model.outsideProvince"
+                            (ngModelChange)="change($event, model)"
+                            name="outsideProvince"
+                            #outsideProvince="ngModel">
+                        <label class="custom-control-label" for="outsideProvince">Para viáticos fuera de la provincia de Corrientes</label>
+                    </div>
+                
+                    <div style="margin-bottom:5px;" class="form-row">
+                        <button 
+                            [disabled]="!name.valid && !percentageValid"
+                            class="btn btn-success ml-auto" >
+                            <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                        </button>
+                    </div>
+                
+                </form>
+                        
+                <div class="alert alert-danger" *ngIf="error">
+                    <ul *ngFor="let e of error">
+                        <li>{{e.value}}</li>
+                    </ul>
+                </div>
+        
+            </div>
+        </div>
+</div>

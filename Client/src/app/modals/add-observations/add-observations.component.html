@@ -1,0 +1,81 @@
+<div class="modal-header bg-dark text-white">
+  <h4 class="modal-title" style="font-size : large;">Posponer</h4>
+</div>
+
+<form #pospone="ngForm">
+  <div class="modal-body">
+    <div class="p-1 form-row">
+      <button 
+        class="btn btn-success"
+        (click)="add()">
+        <fa-icon icon="plus"></fa-icon>
+      </button>
+    </div>
+
+    <div class="p-1" style="min-height: 300px;">
+      <table class="table table-striped">
+          <thead>
+            <tr class="form-row">
+              <th class="col">Description</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let obs of observationList" class="form-row">
+              <td class="col">
+                <input 
+                  type="text"
+                  class="form-control"
+                  [hidden]="obs.hidden"
+                  [(ngModel)]="obs.description"
+                  name="description1{{obs.id}}"
+                  #description1="ngModel">
+                <textarea 
+                  class="form-control"
+                  [hidden]="!obs.hidden"
+                  type="text"
+                  [(ngModel)]="obs.description"
+                  name="description{{obs.id}}"
+                  #description1="ngModel">
+                </textarea>
+              </td>
+              <td class="col-1">
+                <a 
+                  class="pr-2"
+                  (click)="remove(obs)">
+                  <fa-icon style="color : red;" icon="trash"></fa-icon>
+                </a>
+                <a 
+                  (click)="hidden(obs)">
+                  <fa-icon style="color : gray;" icon="edit"></fa-icon>
+                </a>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+    </div>
+  </div>  
+  <div class="modal-footer">
+    <button type="button" 
+      *ngIf="accountFor"
+      (click)="sendToAccountFor()" 
+      class="btn btn-primary col-md-2 mr-auto"
+      style="font-size:small">
+      Agregar
+    </button>
+    <button type="button" 
+      *ngIf="!accountFor"
+      (click)="send()" 
+      class="btn btn-primary col-md-2 mr-auto"
+      style="font-size:small">
+      Si, Posponer
+    </button>
+    <button
+      type="button"
+      (click)="closeModal()" 
+      style="font-size:small"
+      class="btn btn-default col-md-2">
+      Cancelar
+    </button>
+  </div>
+</form>
+

@@ -1,0 +1,12 @@
+<div class="p-2" style="border: 1px #D5DBDB solid;">
+  <div class="text-center">
+        <h2><b>{{name}}</b></h2>
+  </div>
+    
+  <ngx-treeview [config]="config" [items]="items" (filterChange)="onFilterChange($event)" 
+  (selectedChange)="values = $event">
+  </ngx-treeview>
+  <div class="form-row mr-1">
+      <button (click)="save()" class="btn btn-success mt-2 ml-auto">Guardar</button>
+  </div>
+</div>

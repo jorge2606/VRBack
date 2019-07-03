@@ -1,0 +1,284 @@
+<a 
+    class="btn btn-primary mb-1 ml-2" href="" routerLink="/users">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+<ngb-tabset #t="ngbTabset" (tabChange)="setTitleTabProfile()">
+    <ngb-tab id="tab-selectbyid1" title="Perfil">
+        <ng-template ngbTabContent>
+        <div class="container col-md-6">
+        <div class="card mt-1 mb-2">
+            <h5 *ngIf="!id" class="card-header">Nuevo</h5>
+            <h5 *ngIf="id" class="card-header">Modificar</h5>
+        <div class="card-body">
+
+            <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+
+                    <div class="form-row mb-1">
+                        <div class="col-6">
+                            <input 
+                            class="form-control" 
+                            [(ngModel)]="model.dni" 
+                            #dni="ngModel" 
+                            name="Dni"  
+                            type="number"
+                            placeholder="Dni" 
+                            mask='00-00000000-0'
+                            [showMaskTyped] = "true"
+                            type='text' 
+                            required>
+                        </div>
+                    </div>
+            
+                    <div style="margin-top: 10px;" 
+                    *ngIf="dni.dirty && !submitted && dni.invalid" 
+                    class="alert alert-danger">
+                        <div *ngIf="dni.errors.required">
+                            El campo 'Dni' no debería estar vacío
+                        </div>
+                    </div>
+            
+                    <div class="form-group mb-1">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.firstName" 
+                            #firstName="ngModel" 
+                            required name="firstName" 
+                            type="text"
+                            placeholder="Nombre"
+                            maxlength="100">
+                    </div>
+            
+                    <div *ngIf="submitted && firstName.invalid" clas="alert alert-danger mt-1">
+                            Nombre Incorrecto
+                    </div>
+            
+                    <div class="form-group mb-1">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.lastName" 
+                            #lastName="ngModel" 
+                            required name="lastName" 
+                            type="text"
+                            placeholder="Apellido"
+                            maxlength="100">
+                    </div>
+            
+                    <div *ngIf="submitted && lastName.invalid" clas="alert alert-danger mt-1">
+                            Apellido Incorrecto
+                    </div>
+            
+                    <div class="form-group mb-1">
+                        <input class="form-control" 
+                            [(ngModel)]="model.userName" 
+                            required 
+                            [disabled]="id"
+                            #Usuario="ngModel" 
+                            name="Usuario" 
+                            type="text"
+                            placeholder="Usuario o Email" value="">
+                    </div>
+            
+                    <div *ngIf="submitted && Usuario.invalid" class="alert alert-danger mt-1">
+                        Usuario Incorrecto
+                    </div>
+            
+                    <div class="form-group mb-1">
+                        <input class="form-control" 
+                            (keyup)="comparePassword()" 
+                            [(ngModel)]="model.password"
+                            [ngClass]="{
+                                'is-invalid' : !passwordsAreEquals && !passwordEmpty ,
+                                'is-valid' : passwordsAreEquals && !passwordEmpty
+                            }" 
+                            #password="ngModel" 
+                            name="password" 
+                            type="password"
+                            placeholder="Nueva Contraseña" 
+                            value="">
+                    </div>
+
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input 
+                            class="form-control"
+                            (keyup)="comparePassword()" 
+                            [(ngModel)]="model.repeatPassword" 
+                            [ngClass]="{
+                                'is-invalid' : !passwordsAreEquals && !passwordEmpty ,
+                                'is-valid' : passwordsAreEquals && !passwordEmpty
+                            }"
+                            #repeatPassword="ngModel" 
+                            name="repeatPassword" 
+                            type="password"
+                            placeholder="Repetir Contraseña" 
+                            value="">
+                    </div>
+                    <div class="form-group mb-0">
+                        <div class="form-row ml-0">
+                            <div *ngFor="let rol of model.rolesUser" class="custom-control custom-checkbox mr-2">
+                                <input name="{{rol.id}}" 
+                                    value="{{rol.id}}" 
+                                    [(ngModel)]="rol.rolBelongUser" 
+                                    type="checkbox" 
+                                    (click)="changeStateCheckbox(rol)"
+                                    [ngClass]="{'is-invalid' : !validCheckbox}"
+                                    class="custom-control-input" 
+                                    id="customControlValidation{{rol.id}}">
+                                <label class="custom-control-label small" for="customControlValidation{{rol.id}}">{{rol.normalizedName}}</label>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="form-group mb-1">
+                        <input class="form-control" 
+                            [(ngModel)]="model.phoneNumber" 
+                            required 
+                            #PhoneNumber="ngModel" 
+                            name="phoneNumber"
+                            type="text" 
+                            placeholder="Telefóno">
+                    </div>
+            
+                    <div *ngIf="submitted && PhoneNumber.invalid" class="alert alert-danger mt-1">
+                        Telefóno Incorrecto
+                    </div>
+            
+                    <div class="form-group mb-1">
+                        <select 
+                            class="form-control mt-1" 
+                            #distributionId="ngModel" 
+                            name="distributionId" 
+                            [(ngModel)]="model.distributionId"
+                            [ngClass]="{ 'is-invalid': (distributionId.dirty || userForm.submitted) && distributionId.invalid,
+                            'is-valid' : distributionId.dirty && distributionId.valid }"
+                            required>
+                            <option 
+                                class="form-control" 
+                                *ngIf="selecteddistributionId == model.distributionId" 
+                                [ngValue]="selecteddistributionId" disabled>
+                                Seleccione una Distribución...
+                            </option>
+                            <option class="form-control" *ngFor="let dist of distribution" value="{{dist.id}}">{{dist.name}}</option>
+                        </select>
+                    </div>
+            
+            
+                    <div class="form-group mb-1">
+                        <select 
+                            class="form-control mt-1" 
+                            #categoryId="ngModel" 
+                            name="categoryId" 
+                            [(ngModel)]="model.categoryId"
+                            [ngClass]="{ 'is-invalid': (categoryId.dirty || userForm.submitted) && categoryId.invalid,
+                            'is-valid' : categoryId.dirty && categoryId.valid }"
+                            required>
+                            <option class="form-control" *ngIf="selectedCategoryId == model.categoryId" [ngValue]="selectedCategoryId" disabled>
+                                Seleccione una Categoría...
+                            </option>
+                            <option class="form-control" *ngFor="let cat of categories" value="{{cat.id}}">{{cat.name}} - {{cat.description}}</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group mb-1">
+                        <select 
+                            class="form-control mt-1" 
+                            #supervisorAgentId="ngModel" 
+                            name="supervisorAgentId" 
+                            [hidden]="supervisor1"
+                            (change)="selectedSupervisor()"
+                            [(ngModel)]="model.supervisorAgentId"
+                            [ngClass]="{ 'is-invalid': (supervisorAgentId.dirty || userForm.submitted) && supervisorAgentId.invalid,
+                            'is-valid' : supervisorAgentId.dirty && supervisorAgentId.valid }">
+                            <option class="form-control" 
+                                *ngIf="selectedSupervisorAgentId == model.supervisorAgentId"
+                                [ngValue]="selectedSupervisorAgentId">
+                                Seleccione un Supervisor de 1ra Instancia...
+                            </option>
+                            <option class="form-control" 
+                                *ngIf="selectedSupervisorAgentModifyId == model.supervisorAgentId"
+                                [ngValue]="selectedSupervisorAgentModifyId">
+                                Seleccione un Supervisor de 1ra Instancia...
+                            </option>
+                            <option class="form-control" 
+                                *ngIf="(selectedSupervisorAgentModifyId != model.supervisorAgentId) && (selectedSupervisorAgentModifyId != model.selectedSupervisorAgentId)"
+                                [ngValue]="selectedSupervisorAgentModifyId">
+                                Seleccione un Supervisor de 1ra Instancia...
+                            </option>
+                            <option class="form-control" 
+                                *ngFor="let sup of allSupervisors" 
+                                value="{{sup.supervisors.id}}">{{sup.supervisors.lastName}}, {{sup.supervisors.firstName}} - {{sup.roleName}}
+                            </option>
+                        </select>
+                    </div>                    
+                    <div class="form-group mb-1">
+                            <select 
+                                class="form-control mt-1" 
+                                #supervisorAgentId2="ngModel" 
+                                name="supervisorAgentId2" 
+                                [hidden]="supervisor2"
+                                [(ngModel)]="model.supervisorAgentId2"
+                                [ngClass]="{ 'is-invalid': (supervisorAgentId2.dirty || userForm.submitted) && supervisorAgentId2.invalid,
+                                'is-valid' : supervisorAgentId2.dirty && supervisorAgentId2.valid }">
+                                <option 
+                                    class="form-control" 
+                                    *ngIf="selectedSupervisorAgentModifyId2 == model.supervisorAgentId2"
+                                    [ngValue]="selectedSupervisorAgentModifyId2">
+                                    Seleccione un Supervisor de 2da Instancia...
+                                </option>
+                                <option 
+                                    class="form-control" 
+                                    *ngIf="selectedSupervisorAgentId2 == model.supervisorAgentId2"
+                                    [ngValue]="selectedSupervisorAgentId2">
+                                    Seleccione un Supervisor de 2da Instancia...
+                                </option>
+                                <option 
+                                    class="form-control" 
+                                    *ngIf="(selectedSupervisorAgentId2 != model.supervisorAgentId2) && (selectedSupervisorAgentModifyId2 != model.supervisorAgentId2)"
+                                    [ngValue]="selectedSupervisorAgentId2">
+                                    Seleccione un Supervisor de 2da Instancia...
+                                </option>
+                                <option class="form-control" 
+                                    *ngFor="let sup of allSupervisors" 
+                                    value="{{sup.supervisors.id}}">{{sup.supervisors.lastName}}, {{sup.supervisors.firstName}} - {{sup.roleName}}
+                                </option>
+                            </select>
+                    </div>
+
+                    <div class="form-row mt-1">
+                            <button 
+                                class="btn btn-success ml-auto" [disabled]="!userForm.form.valid">
+                                <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                            </button>
+                    </div>
+            </form>
+
+
+        </div>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="errors">
+        <ul *ngFor="let e of errors">
+            <li>{{e.value}}</li>
+        </ul>
+        </div>
+        <div *ngIf=" submitted && !userForm.form.valid">
+        Hay Campos erroneos en el formulario, verifiquelos
+        </div>
+        </div>
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab *ngIf="editSignatureHolograpich">
+        <ng-template ngbTabTitle>Firma Hológrafa</ng-template>
+        <ng-template ngbTabContent>
+            <div class="container col-md-4">
+                <app-holograph-sign [supervisorId]="id"></app-holograph-sign>
+            </div>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>
+
+
+
+    
+
+
+

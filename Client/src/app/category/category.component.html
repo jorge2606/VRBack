@@ -1,0 +1,68 @@
+<div class="ml-2 mt-1">
+	<div *ngIf="categoryCreate" class="d-inline-block ml-2">
+		<a 	href="" 
+			class="btn btn-success" 
+			routerLink="create">
+			<fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+		</a>
+	</div>	
+	
+	<label class="d-inline-block pl-1 pr-1" for="">Nombre </label>
+	<div class="d-inline-block">
+		<input (keyup)="findWhileWrite()" [(ngModel)]="filters.name"  type="text" class="form-control">
+	</div>
+</div>
+
+<div class="p-2" style="min-height: 300px;">
+	<table class="table table-striped">
+		<thead>
+			<tr style="font-weight: bold;">
+				<td>Nombre</td>
+				<td>Descripción</td>
+				<td class="text-right">Adelanto</td>
+				<td></td>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let cat of categories">
+				<td>{{cat.name}}</td>
+				<td>{{cat.description}}</td>
+				<td class="text-right">{{cat.advance | number}}</td>
+				<td class="text-right">
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<a 
+							*ngIf="categoryEdit"
+							placement="bottom" 
+							ngbTooltip="Editar" 
+							class="pr-3" routerLink="/category/update/{{cat.id}}">
+							<fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+						</a>
+						<a 
+							*ngIf="categoryDelete"
+							placement="bottom" 
+							ngbTooltip="Eliminar"
+							class="pr-3"
+							routerLink="/category" (click)="openEliminar(cat.id,cat.name,cat.description)">
+							<fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+						</a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+
+		<app-alert 
+			*ngIf="category_list_length == 0" 
+			[textAlert]="textListEmpty"
+			[typeAlert]="classListEmpty">			
+		</app-alert>
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination">
+</ngb-pagination>

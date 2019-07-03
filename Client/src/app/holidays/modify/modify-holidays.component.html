@@ -1,0 +1,83 @@
+<a class="btn btn-primary mb-1 ml-2" href="" routerLink="/holidays">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+  <div class="container col-md-5">
+    
+    <div class="card">
+          <div class="card-header">
+              <h5>Modificar</h5>
+          </div>
+          <div class="card-body">
+              <form (ngSubmit)="onSubmit()" #holidaysForm="ngForm">
+  
+                      <div class="form-group">
+                              <input class="form-control" 
+                              [(ngModel)]="model.description" 
+                              #description="ngModel" 
+                              required 
+                              [ngClass]="{ 'is-invalid': (description.dirty || holidaysForm.submitted) && description.invalid,
+                              'is-valid' : description.valid}"
+                              name="description"
+                              id="description" 
+                              type="text" 
+                              placeholder="Descripción">
+                          </div>
+                  
+  
+                          <div *ngIf="description.dirty && !holidaysForm.submitted && description.invalid" 
+                              class="alert alert-danger mt-1">
+                              <div *ngIf="description.errors.required">
+                                  El campo 'Descripción' no debería estar vacío
+                              </div>
+                          </div>
+                  
+                          <div class="form-group">
+                          <div class="input-group">
+                              <input class="form-control" 
+                                      placeholder="dd-mm-yyyy"
+                                      name="dp" 
+                                      displayMonths="displayMonths" 
+                                      required 
+                                      [ngClass]="{ 'is-invalid': (date.dirty || holidaysForm.submitted) && date.invalid,
+                                      'is-valid' : date.valid}"
+                                      navigation="navigation"
+                                      outsideDays="outsideDays" 
+                                      showWeekNumbers="showWeekNumbers"
+                                      ngbDatepicker 
+                                      #date="ngModel"
+                                      #dp="ngbDatepicker" 
+                                      (keyup)="validateDate()"
+                                      (click)="validateDate()"
+                                      [(ngModel)]="model.date">
+                              <div class="input-group-append">
+                              <button class="btn btn-outline-secondary calendar" (click)="dp.toggle()" type="button">
+                                  <fa-icon icon="calendar-alt"></fa-icon>
+                              </button>
+                              </div>
+                          </div>
+                          </div>
+                  
+                          <div *ngIf="errorDatapicker" class="alert alert-danger col-8 mt-1">
+                                  {{errorDatapicker}}
+                          </div>
+                          <div *ngIf="date.dirty && !holidaysForm.submitted && date.invalid && date.errors.required" 
+                               class="alert alert-danger col-8 mt-1">
+                              El campo 'Fecha' no debería estar vacío
+                          </div>
+                  
+                          <div class="form-row">
+                              <button class="btn btn-success ml-auto" [disabled]="!holidaysForm.form.valid">
+                                  <fa-icon icon="save"></fa-icon> Guardar
+                              </button>
+                          </div>
+                      </form>
+  
+          </div>
+    </div>
+  
+      <!--<div class="alert alert-danger mt-1" *ngIf="errors">
+          <ul *ngFor="let e of errors">
+              <li>{{e}}</li>
+          </ul>
+      </div>-->
+  </div>

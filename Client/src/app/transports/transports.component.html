@@ -1,0 +1,78 @@
+<a 	
+	*ngIf="transportCreate"
+	href="" class="btn btn-success ml-2" routerLink="create">
+	<fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+</a>
+
+<label class="d-inline-block pl-1 pr-1" for="">Marca </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<input (keyup)="findWhileWrite()" [(ngModel)]="filters.brand" type="text" class="form-control">
+</div>
+<label class="d-inline-block pl-1 pr-1" for="">Modelo </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<input (keyup)="findWhileWrite()" [(ngModel)]="filters.model" type="text" class="form-control">
+</div>
+<label class="d-inline-block pl-1 pr-1" for="">Patente </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<input (keyup)="findWhileWrite()" [(ngModel)]="filters.carPlate" type="text" class="form-control">
+</div>
+
+
+<div class="p-2" style="min-height: 300px;">
+	<table class="table table-striped">
+			<thead>
+				<tr style="font-weight: bold;">
+				<td>Tipo</td>
+				<td>Marca</td>
+				<td>Modelo</td>
+				<td>Patente</td>
+				<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let trans of transport">
+					<td>{{trans.type}}</td>
+					<td>{{trans.brand}}</td>
+					<td>{{trans.model}}</td>
+					<td>{{trans.carPlate}}</td>
+					<td class="text-right">
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<a  
+								*ngIf="transportEdit"
+								placement="bottom" 
+								ngbTooltip="Editar" 
+								class="pr-3" 
+								routerLink="/transport/update/{{trans.id}}">
+								<fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+							</a>
+							<a 	
+								*ngIf="transportDelete"
+								placement="bottom" 
+								ngbTooltip="Eliminar" 
+								routerLink="/transport" 
+								class="pr-3"
+								(click)="openEliminar(trans.id,trans.carPlate,trans.model)">
+								<fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+							</a>
+					</div>
+				</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<app-alert 
+		*ngIf="transport_list_length == 0" 
+		[textAlert]="textListEmpty"
+		[typeAlert]="classListEmpty">			
+		</app-alert>
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination">
+</ngb-pagination>
+

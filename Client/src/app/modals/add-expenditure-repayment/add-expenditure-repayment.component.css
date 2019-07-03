@@ -1,0 +1,148 @@
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.my-drop-zone { border: dotted 3px lightgray; }
+.nv-file-over { border: dotted 3px red; } /* Default class applied to drop zones on over */
+.another-file-over-class { border: dotted 3px green; }
+
+html, body { height: 100%; }
+
+.image {
+    opacity: 1;
+    display: block;
+    width: 100px;
+    height: 100px;
+    transition: .5s ease;
+    backface-visibility: hidden;
+}
+
+.imageUrl {
+    opacity: 1;
+    display: block;
+    width: 100px;
+    height: 100px;
+    transition: .5s ease;
+    backface-visibility: hidden;
+    background-image: url("/assets/images-solid.svg");
+    background-size: 50px;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.text {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+}
+
+.textDanger {
+    background-color: #FF0A0A;
+    color: white;
+    font-size: 16px;
+}
+
+.container-image {
+    position: relative;
+    width: 200px;
+    height: 200px;
+}
+
+.container-image-url {
+    position: relative;
+    width: 25;
+    height: 25;
+}
+
+.middle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+
+.middle-url {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    text-align: center;
+  }
+  
+  .container:hover .image {
+    opacity: 0.3;
+  }
+  
+  .container:hover .middle {
+    opacity: 1;
+  }
+
+  .container:hover .middle-url {
+    opacity: 1;
+  }
+
+  .btn-file {
+    position: relative;
+    overflow: hidden;
+}
+.btn-file input[type=file] {
+    top: 0;
+    right: 0;
+    min-width: 100%;
+    min-height: 100%;
+    font-size: 10px;
+    text-align: right;
+    filter: alpha(opacity=0);
+    outline: none;
+    background: transparent;
+    cursor: inherit;
+    display: block;
+}
+
+.inputfile{
+	width: 0.1px;
+	height: 0.1px;
+	opacity: 0;
+	overflow: hidden;
+	position: absolute;
+	z-index: -1;
+}
+
+.inputfile + label {
+    font-size: inherit;
+    /**font-weight: 700;*/
+    color:black;
+    background-color: transparent;
+    /* display: inline-block; */
+    position: absolute;
+    margin-left: 42%;
+    /**top: 77%;*/
+}
+
+.inputfile:focus + label,
+.inputfile + label:hover {
+    background-color: transparent;
+}
+
+.inputfile + label {
+	cursor: pointer; /* "hand" cursor */
+}
+
+.inputfile:focus + label {
+	outline: 1px dotted #000;
+	outline: -webkit-focus-ring-color auto 5px;
+}
+
+.inputfile + label * {
+	pointer-events: none;
+}

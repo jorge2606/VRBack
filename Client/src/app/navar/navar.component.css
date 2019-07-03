@@ -1,0 +1,66 @@
+.pointer {
+    cursor: pointer;
+}
+
+.nav-item:hover {
+    background-color: #666666;
+    color: black;
+}
+.active, .active:hover {
+    background-color: dodgerblue;
+    color: white;
+}
+
+.dropdown-toggle::after {
+    display: inline-block;
+    width: 0;
+    height: 0;
+    margin-left: .255em;
+    vertical-align: .255em;
+    content: unset;
+    border-top: .3em solid;
+    border-right: .3em solid transparent;
+    border-bottom: 0;
+    border-left: .3em solid transparent;
+}
+
+.btn-light {
+    color: dimgrey;
+    background-color: #f8f9fa;
+    border-color: #f8f9fa;
+}
+
+.bell-size{
+    width: 61px; 
+    height: 41px;
+}
+
+.card button:hover, .dropdown-item :hover{
+    color: white;
+    background-color: #007bff;
+}
+
+.seeAllLink{
+    text-decoration: none;
+    background-color: azure;
+    border-top: 1px solid antiquewhite;
+}
+
+.seeAllLink:hover{
+    text-decoration: none;
+    background-color: #007bff;
+    border-top: 1px solid black;
+    color: white;
+}
+
+.image {
+    border: 1px white solid;
+    border-radius: 6px;
+    width:100%;
+    height: auto;
+    margin-right : 4px;
+}
+
+.backGroundFooter {
+    background-color: #212529;
+}

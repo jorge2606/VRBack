@@ -1,0 +1,76 @@
+<a  style="margin-left : 5px;" class="btn btn-primary navarStyle" href="" routerLink="/organism">
+  <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+<div class="container col-md-6">
+    <div class="card">
+        <h5 class="card-header">Nuevo</h5>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #OrganismForm="ngForm">
+        
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [ngClass]="{ 'is-invalid': (name.dirty || OrganismForm.submitted) && name.invalid,
+                        'is-valid' : name.dirty && name.valid}"
+                        [(ngModel)]="model.name"
+                        #name="ngModel" 
+                        required 
+                        name="name" 
+                        type="text"
+                        placeholder="Nombre">
+                </div>
+            
+                <div *ngIf="name.dirty && !OrganismForm.submitted && name.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="name.errors.required">
+                        El campo 'Nombre' no debería estar vacío
+                    </div>
+                </div>
+            
+                <div class="form-group">
+                    <input 
+                        class="form-control" 
+                        [ngClass]="{ 'is-invalid': (description.dirty || OrganismForm.submitted) && description.invalid,
+                        'is-valid' : description.dirty && description.valid }"
+                        [(ngModel)]="model.description" 
+                        required 
+                        #description="ngModel" 
+                        name="description"
+                        type="text"
+                        placeholder="Descripción">
+                </div>
+            
+                <div *ngIf="description.dirty && !OrganismForm.submitted && description.invalid" 
+                    class="alert alert-danger mt-1">
+                    <div *ngIf="description.errors.required">
+                        El campo 'Descripción' no debería estar vacío
+                    </div>
+                </div>
+            
+                <div class="form-row">
+                    <button 
+                        [disabled]="!OrganismForm.valid"
+                        class="btn btn-success ml-auto" >
+                        <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                    </button>
+                </div>
+                
+            </form>
+        
+            
+            <div class="alert alert-danger mt-1" *ngIf="error">
+                <ul *ngFor="let e of error">
+                    <li>{{e.value}}</li>
+                </ul>
+            </div>
+            
+            <div class="alert alert-success" *ngIf="responseSuccess">
+                <ul>
+                    <li>Guardado</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+

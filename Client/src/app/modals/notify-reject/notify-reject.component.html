@@ -1,0 +1,21 @@
+<div class="modal-header bg-dark text-white">
+  <h4 class="modal-title">{{title}}</h4>
+</div>
+<form #addMotive="ngForm">
+  <div class="modal-body">
+    <textarea
+    class="form-control" 
+    [ngStyle]="{'height' : '100px', 'resize' : 'none'}" 
+    cols="30" 
+    rows="10"
+    [(ngModel)]="model.motive"
+    name="motive"
+    motive="ngModel"
+    required></textarea>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" [hidden]="!addMotive.valid" (click)="save()">Guardar</button>
+    <button type="button" class="btn btn-default" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+  </div>
+</form>

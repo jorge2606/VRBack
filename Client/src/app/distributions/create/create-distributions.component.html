@@ -1,0 +1,95 @@
+<a  style="margin-left : 5px;" class="btn btn-primary" href="" routerLink="/distribution">
+  <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+<div class="container col-md-6">
+    <div class="card">
+        <h5 class="card-header">Nuevo</h5>
+        <div class="card-body">
+            <form (ngSubmit)="onSubmit()" #DistributionForm="ngForm">
+    
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input class="form-control" 
+                            [(ngModel)]="model.name"
+                            [ngClass]="{ 'is-invalid': (name.dirty || DistributionForm.submitted) && name.invalid,
+                            'is-valid' : name.dirty && name.valid}" 
+                            #name="ngModel" 
+                            required 
+                            name="name" 
+                            type="text"
+                            placeholder="Nombre">
+                    </div>
+                
+                    <div 
+                        *ngIf="name.dirty && !DistributionForm.submitted && name.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="name.errors.required">
+                            El campo 'Nombre' no debería estar vacío
+                        </div>
+                    </div>
+                
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.description" 
+                            [ngClass]="{ 'is-invalid': (description.dirty || DistributionForm.submitted) && description.invalid,
+                            'is-valid' : description.dirty && description.valid }"
+                            required 
+                            #description="ngModel" 
+                            name="description" 
+                            type="text"
+                            placeholder="Descripción">
+                    </div>
+                
+                    <div *ngIf="description.dirty && !DistributionForm.submitted && description.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="description.errors.required">
+                            El campo 'Descripción' no debería estar vacío
+                        </div>
+                    </div>
+
+                    <select 
+                        required 
+                        class="form-control" 
+                        #organismId="ngModel" 
+                        name="organismId" 
+                        [ngClass]="{ 'is-invalid': (organismId.dirty || DistributionForm.submitted) && organismId.invalid,
+                        'is-valid' : organismId.dirty && organismId.valid }"
+                        [(ngModel)]="model.organismId">
+                            <option *ngIf="selectedOrganismId == model.organismId" 
+                                [ngValue]="selectedOrganismId" disabled>
+                                Seleccione un Organismo...
+                            </option>
+                        <option *ngFor="let org of organism" value="{{org.id}}">{{org.name}}</option>
+                    </select>
+
+                    <div *ngIf="organismId.dirty && !DistributionForm.submitted && organismId.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="organismId.errors.required">
+                            Debe seleccionar un Organismo
+                        </div>
+                    </div>
+                
+                    <div class="form-row mt-1">
+                        <button 
+                            [disabled]="!DistributionForm.valid" 
+                            class="btn btn-success ml-auto">
+                            <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                        </button>
+                    </div>
+                
+                </form>
+            
+            <div class="alert alert-danger mt-1" *ngIf="error">
+                <ul *ngFor="let e of error">
+                    <li>{{e.value}}</li>
+                </ul>
+            </div>
+              
+        </div>
+    </div>
+</div>
+
+
+
+  

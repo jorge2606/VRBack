@@ -1,0 +1,95 @@
+<a style="margin-left : 5px;" class="btn btn-primary" href="" routerLink="/category">
+  <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+
+
+<div class="container col-md-6">
+        <div class="card">
+            <h5 class="card-header">Nuevo</h5>
+            <div class="card-body">
+                <form (ngSubmit)="onSubmit()" #CategoryForm="ngForm">
+                    
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.name" 
+                            [ngClass]="{ 'is-invalid': (name.dirty || submitted) && name.invalid,
+                            'is-valid' : name.dirty && name.valid }"
+                            #name="ngModel" 
+                            required 
+                            name="name" 
+                            type="text"
+                            placeholder="Nombre">
+                    </div>
+                    
+                    <div  
+                        *ngIf="name.dirty && !submitted && name.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="name.errors.required">
+                            El campo 'Nombre' no debería estar vacío
+                        </div>
+                    </div>
+                
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input 
+                            class="form-control" 
+                            [(ngModel)]="model.description" 
+                            required 
+                            #description="ngModel" 
+                            name="description" 
+                            type="text"
+                            placeholder="Descripción"
+                            [ngClass]="{ 'is-invalid': (description.dirty || submitted) && description.invalid,
+                            'is-valid' : description.dirty && description.valid }">
+                    </div>
+                    <div
+                        *ngIf="description.dirty && !submitted && description.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="description.errors.required">
+                            El campo 'Descripción' no debería estar vacío
+                        </div>
+                    </div>
+                
+                    <div style="margin-bottom:5px;" class="form-group">
+                        <input 
+                            class="form-control"
+                            [(ngModel)]="model.advance" 
+                            required 
+                            #advance="ngModel" 
+                            name="advance" 
+                            type="number"
+                            maxlength="8"
+                            pattern="[0-9]+"
+                            placeholder="Anticipo"
+                            [ngClass]="{ 'is-invalid ng-valid': (advance.dirty || submitted) && advance.invalid,
+                            'is-valid' : advance.dirty && advance.valid }">
+                    </div>
+                
+                    <div  
+                        *ngIf="advance.dirty && !submitted && advance.invalid" 
+                        class="alert alert-danger mt-1">
+                        <div *ngIf="advance.errors.required">
+                            El campo 'Anticipo' no debería estar vacío
+                        </div>
+                    </div>
+                
+                    <div style="margin-bottom:5px;" class="form-row">
+                        <button [disabled]="!CategoryForm.valid" 
+                                class="btn btn-success ml-auto" >
+                            <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                        </button>
+                    </div>
+                
+                </form>            
+        </div>
+    </div>
+</div>
+
+
+
+
+  
+
+
+
+

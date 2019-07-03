@@ -1,0 +1,27 @@
+.no-wrap {
+    display: block;
+    width: 400px;
+    white-space: pre;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    /**border: none;**/
+  }
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+.cardInsideTd {
+    position: relative;
+    display: -webkit-inline-box;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0,0,0,.125);
+    border-radius: .25rem;
+  }

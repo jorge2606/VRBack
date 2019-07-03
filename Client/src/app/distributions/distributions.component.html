@@ -1,0 +1,88 @@
+<div *ngIf="distributionCreate" class="d-inline-block ml-2">
+	<a href="" class="btn btn-success" routerLink="/distribution/create">
+	<fa-icon icon="plus" class="fa-lg"></fa-icon> Nuevo
+	</a>
+
+	<label class="d-inline-block mt-2 mr-2" for="">Organismos </label>
+	<div class="d-inline-block pl-1 col-md-4">
+		<select  (change)="filterList()" [(ngModel)]="filters.organismId" class="form-control d-inline-block pl-1">
+			<option value=""></option>
+			<option *ngFor="let org of organisms" value="{{org.id}}">
+				{{org.name}}
+			</option>
+		</select>
+	</div>
+
+	<label class="d-inline-block mt-2 ml-2 mr-2" for="">Nombre </label>
+	<div class="d-inline-block pl-1 pr-1 col-md-3">
+		<input (keyup)="findWhileWrite()" [(ngModel)]="filters.name" type="text" class="form-control">
+	</div>
+</div>
+
+
+<div class="p-2" style="min-height: 300px;">
+	<table class="table table-striped">
+			<thead>
+				<tr style="font-weight: bold;">
+					<td>Nombre</td>
+					<td>Descripción</td>
+					<td>Organismos</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let dist of distribution">
+					<td>{{dist.name}}</td>
+					<td>{{dist.description}}</td>
+					<td>
+						<!--<a 	[ngStyle]="{'pointer-events ' : '!dist.organism' ? 'none' : 'auto' }" 
+							routerLink="/distribution" (click)="seeOrganism(dist.organism)">
+							ver
+						</a>-->
+						<span *ngIf="dist.organism.name">{{ dist.organism.name }}</span>
+					</td>
+					<td class="text-center">
+						<a 	placement="bottom" 
+							ngbTooltip="Ver usuarios de esta distribución" 
+							routerLink="/distribution/{{dist.id}}">
+							usuarios
+						</a>
+					</td>
+					<td class="text-right">
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<a 	
+								*ngIf="distributionEdit"
+								placement="bottom" 
+								ngbTooltip="Editar" 
+								class="pr-3" routerLink="/distribution/update/{{dist.id}}">
+								<fa-icon class="fa-lg" style="color:gray;cursor: pointer;" icon="edit"></fa-icon>
+							</a>
+							<a 	
+								*ngIf="distributionDelete"
+								placement="bottom" 
+								ngbTooltip="Eliminar" 
+								class="pr-3"
+								routerLink="/distribution" (click)="openEliminar(dist.id,dist.name,dist.description)">
+								<fa-icon class="fa-lg" style="color:red;cursor: pointer;" icon="trash"></fa-icon>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<app-alert 
+			*ngIf="distribution_list_length == 0" 
+			[textAlert]="textListEmpty"
+			[typeAlert]="classListEmpty">			
+		</app-alert>
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination">
+</ngb-pagination>

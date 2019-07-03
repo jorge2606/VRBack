@@ -1,0 +1,648 @@
+<a  placement="bottom" ngbTooltip="Volver al listado de solicitudes de viáticos" 
+    class="btn btn-primary m-2" href="" routerLink="/SolicitationSubsidy/agent">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>
+</a>
+
+<div class="card m-2">
+    <h5 *ngIf="!id" class="card-header">Nuevo Reintegro</h5>
+    <div class="card-body">
+        <form (ngSubmit)="onSubmit()" #solicitationSubsidy="ngForm">
+                <div class="navar navbar-collapse"> 
+                    <label for="">Total</label>
+                    <ul class="navbar-nav ml-auto">
+                        <li>
+                            <div class="form-inline my-2 my-lg-0">
+                                <input 
+                                    type="text" 
+                                    style="font-size: 12px;"
+                                    class="form-control text-right" 
+                                    name="total"
+                                    disabled 
+                                    #total="ngModel" 
+                                    [ngModel]="model.total | currency" 
+                                    (ngModelChange)="validateTotal(model,$event)"
+                                    style="resize : none; font-size: 12px;">
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group pt-1 col">
+                            <label for="">Número de Expediente</label>
+                            <input required 
+                                class="form-control col-md-3" 
+                                #numberFile="ngModel"
+                                maxlength="100"
+                                [ngClass]="{'is-invalid' : numberFile.invalid && (numberFile.dirty || numberFile.touched)}"
+                                name="numberFile" [(ngModel)]="model.fileNumber" 
+                                style="resize : none;font-size: 12px;">
+    
+                            <div *ngIf="numberFile.invalid && (numberFile.dirty || numberFile.touched)" class="alert alert-danger col-md-3 mt-1">
+                                <div *ngIf="numberFile.errors.required">
+                                    Campo requerido.
+                                </div>
+                            </div>
+                    </div>
+                </div>
+        
+                <div class="form-row">
+                        <div class="form-group pt-1 col">
+                                <label for="">Motivo</label>
+                                <textarea 
+                                    required 
+                                    class="form-control textareaResize" 
+                                    #motive="ngModel"
+                                    [ngClass]="{'is-invalid' : motive.invalid && (motive.dirty || motive.touched)}"
+                                    name="motive" 
+                                    [(ngModel)]="model.motive" 
+                                    style="resize : none; font-size: 12px;">
+                                </textarea>
+        
+                                <div *ngIf="motive.invalid && (motive.dirty || motive.touched)" class="alert alert-danger mt-1">
+                                    <div *ngIf="motive.errors.required">
+                                        Campo requerido.
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+
+                <!-- <div class="text-center bg-dark text-white mb-1">
+                    <label for=""><b>Solicitado</b></label>
+                </div>
+        
+                <div class="form-row mt-1 mb-1">
+                    <button
+                        class="btn btn-default ml-auto mb-1 small"
+                        type="button" 
+                        style="font-size : 12px;"
+                        [hidden]="!model.destinies"
+                        (click)="onChangeColapse()"
+                        *ngIf="model.destinies.length > 0"
+                        [attr.aria-expanded]="!isCollapsedDestiny" 
+                        aria-controls="collapseDestiny"
+                        placement="bottom" ngbTooltip="Ocultar todos los destinos">
+                        <fa-icon class="fa-lg" icon="{{verOcultarIconDestiny}}"></fa-icon>
+                        {{verOcultarTextDestiny}} ({{model.destinies.length}})
+                </button>
+                </div>
+
+                 <div class="form-row mb-4">
+                    <div class="col-md">
+                        <table *ngIf="DestinyStatic.length > 0" class="table table-sm" style="margin-bottom : 0px">
+                            <thead>
+                                <tr class="form-row">
+                                    <th class="col">Destino</th>
+                                    <th class="col-2 text-right">Dias</th>
+                                    <th class="col-2 text-right">Dias/$</th>
+                                    <th class="col-2 text-right">Importe</th>
+                                </tr>  
+                            </thead>
+                            <tbody id="collapseDestiny" [ngbCollapse]="isCollapsedDestiny" 
+                                *ngFor="let destinyStatic of DestinyStatic">
+                                <tr class="form-row">        
+                                    <td class="col">
+                                        <span *ngIf="destinyStatic.countryId">{{destinyStatic.countryName}} </span> 
+                                        <span *ngIf="!destinyStatic.countryId">{{destinyStatic.provinceName}} - {{destinyStatic.cityName}} </span>
+                                        <span class="mr-1 cardInsideTd" *ngFor="let c of destinyStatic.supplementaryCities"> 
+                                            <span *ngIf="!destinyStatic.countryId">, {{ c.name }}</span>
+                                        </span>
+                                    </td>
+                                    <td class="col-2 text-right">
+                                        {{destinyStatic.days}}
+                                    </td>
+                                    <td class="col-2 text-right">
+                                        {{destinyStatic.daysPay}}
+                                    </td>
+                                    <td class="col-2 text-right">
+                                        {{destinyStatic.advanceCategory * destinyStatic.daysPay * destinyStatic.percentageCodeLiquidation | currency}}
+                                    </td>  
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div> -->
+                <div class="form-row mt-1 mb-1">
+                        <button 
+                            type="button" 
+                            class="btn btn-success" 
+                            (click)="AddDestiny()">
+                                <fa-icon class="fa-lg" icon="plus"></fa-icon> Destino
+                        </button> 
+                        <button (click)="deleteAllDestinies()" 
+                            *ngIf="model.destinies.length > 0 && !id"
+                            class="btn btn-danger ml-1 text-white">
+                            <fa-icon class="fa-lg" icon="trash"></fa-icon> Eliminar Todos
+                        </button>
+            
+                        <button 
+                            placement="bottom" 
+                            ngbTooltip="Ocultar todos los gastos" 
+                            type="button" 
+                            class="btn btn-default ml-auto mb-1 small" 
+                            (click)="changeCollapseExpenditure()"
+                            style="font-size : 12px;"
+                            [attr.aria-expanded]="!isCollapsedExpenditure"
+                            aria-controls="collapseExpenditure">
+                            <fa-icon class="fa-lg" icon="{{verOcultarIconExpenditure}}"></fa-icon>
+                                {{verOcultarTextExpenditure}}
+                                ({{model.expenditures.length}})
+                        </button>
+                    </div>
+
+                <div class="text-center bg-dark text-white mb-1">
+                    <label for=""><b>A rendir</b></label>
+                </div>
+
+                <div class="form-row">
+                    <!--Destino to modify-->
+                    <table class="table table-sm" style="margin-bottom : 0px">
+                    <thead>
+                        <tr class="form-row">
+                            <th class="col-2">Fecha</th>
+                            <th class="col-3">Transporte</th>
+                            <th class="col-1 text-center" style="border-right: 1.5px solid #dee2e6;border-left: 3px solid #dee2e6;">Inicio</th>
+                            <th class="col-1 text-center" style="border-right: 3px solid #dee2e6;border-left: 1.5px solid #dee2e6;">Fin</th>
+                            <th class="col">Destino</th>
+                            <th class="col-1 text-right">Dias</th>
+                            <th class="col-1 text-right">Dias/$</th>
+                            <th class="col-1 text-right">Importe</th>
+                        </tr>  
+                    </thead>
+                    <tbody id="collapseDestiny" [ngbCollapse]="isCollapsedDestiny" *ngFor="let destiny of model.destinies">
+                        <tr class="form-row">  
+                            <td class="col-2">
+                                <div class=".form-group { width : 56% !important; height : 11px !important;">
+                                        <div class="input-group">
+                                            <input 
+                                            class="form-control"
+                                            style="width: 120px; font-size : 12px; height: 30px;" 
+                                            placeholder="dd/mm/yyyy"
+                                            name="dp{{destiny.id}}" 
+                                            [readonly]="true"
+                                            type="text"
+                                            displayMonths="displayMonths" 
+                                            navigation="navigation" 
+                                            outsideDays="outsideDays" 
+                                            showWeekNumbers="showWeekNumbers"
+                                            ngbDatepicker 
+                                            #d="ngbDatepicker" 
+                                            [(ngModel)]="destiny.startDate"
+                                            required>
+                                            <div class="input-group-append">
+                                            <button class="btn btn-outline-secondary calendar"
+                                                style="font-size : 12px; height: 30px;" 
+                                                (click)="d.toggle()" type="button">
+                                                <fa-icon icon="calendar-alt"></fa-icon>
+                                            </button>
+                                            </div>
+                                            <div class="input-group-append">
+                                                <button
+                                                    style="font-size : 12px; height: 30px;" 
+                                                    placement="right"
+                                                    ngbTooltip="Limpiar"
+                                                    class="btn btn-outline-secondary calendar" (click)="clear(modelExp)" type="button">
+                                                    <fa-icon icon="eraser"></fa-icon>
+                                                </button>
+                                            </div>
+                                        </div>            
+                                </div>
+                            </td>     
+                            <td class="col-3">
+                                <ngx-select-dropdown 
+                                    [config]="configTransport" 
+                                    [options]="transports" 
+                                    name="transport{{destiny.id}}"
+                                    #transportId="ngModel"
+                                    [(ngModel)]="destiny.transport" 
+                                    [multiple]="false" 
+                                    required>
+                                </ngx-select-dropdown>
+                            </td>
+                            <td class="col-1" style="border-right: 1.5px solid #dee2e6;border-left: 3px solid #dee2e6;">
+                                <ngb-timepicker  name="timeStartDate{{destiny.id}}" [(ngModel)]="destiny.timeStartDate" aria-required="true" class="fonts"></ngb-timepicker>
+                            </td> 
+                            <td class="col-1" style="border-right: 3px solid #dee2e6;border-left: 1.5px solid #dee2e6;">
+                                <ngb-timepicker name="timeEndDate{{destiny.id}}" [(ngModel)]="destiny.timeEndDate" aria-required="true" class="fonts"></ngb-timepicker>
+                            </td>
+                            <td class="col">
+                                <span *ngIf="destiny.countryId">{{destiny.countryName}} </span> 
+                                <span *ngIf="!destiny.countryId">{{destiny.provinceName}} - {{destiny.cityName}} </span>
+                                <span class="mr-1 cardInsideTd" *ngFor="let c of destiny.supplementaryCities"> 
+                                    <span *ngIf="!destiny.countryId">, {{ c.name }}</span>
+                                </span>
+                            </td>
+                            <td class="col-1 text-right">
+                                {{destiny.days}}
+                            </td>
+                            <td class="col-1 text-right">
+                                <input 
+                                [(ngModel)]="(destiny.accountedForDays == null) ? destiny.daysPay : destiny.accountedForDays"
+                                type="number"
+                                onkeydown="return false;"
+                                min="0" 
+                                max="{{destiny.days}}"
+                                name="days{{destiny.id}}"
+                                class="input-destiny"
+                                required>
+                            </td>
+                            <td class="col-1 text-right" *ngIf="!destiny.accountedForDays">
+                                {{destiny.advanceCategory * destiny.daysPay * destiny.percentageCodeLiquidation | currency}}
+                            </td>  
+                            <td class="col-1 text-right" *ngIf="destiny.accountedForDays">
+                                {{destiny.advanceCategory * destiny.accountedForDays * destiny.percentageCodeLiquidation | currency}}
+                            </td>  
+                        </tr>
+                    </tbody>
+                    </table>
+                </div>
+
+                <div class="form-row mt-1 mb-1">
+                        <a  placement="bottom" ngbTooltip="Agregar un nuevo concepto gasto"
+                            style="font-size: 12px;"
+                            (click)="openAddNewConcept()" class="btn btn-success mb-1 text-white small">
+                            <fa-icon class="fa-lg" icon="plus"></fa-icon> Concepto de Gasto
+                        </a>
+            
+                        <!--Concepto de Gasto-->
+
+                </div>
+
+                <div class="form-row">
+                    <table *ngIf="model.expenditures.length > 0" class="table table-sm">
+                            <thead>
+                                <tr class="form-row">
+                                    <th class="col-1 text-center">N° Orden</th>
+                                    <th class="col-2">Fecha de Comprobante</th>
+                                    <th class="col-2">Concepto</th>
+                                    <th class="col-5"> Descripción</th>
+                                    <th class="col-1 text-right">Importe</th>
+                                    <th class="col-1"></th>
+                                </tr>
+                            </thead>
+                            <tbody id="collapseExpenditure" [ngbCollapse]="isCollapsedExpenditure" 
+                                    *ngFor="let modelExp of model.expenditures" class="collapse show">
+                                <tr class="form-row">
+                                    <td class="col-1 text-center">
+                                        {{modelExp.orderNumber}}
+                                    </td>
+                                    <td class="col-2">
+                                        <div class=".form-group { width : 56% !important; height : 11px !important;}">
+                                            <div class="input-group">
+                                                <input 
+                                                class="form-control" 
+                                                style="width: 120px; font-size : 12px; height: 30px;"
+                                                placeholder="dd/mm/yyyy"
+                                                name="dp{{modelExp.orderNumber}}" 
+                                                [readonly]="true"
+                                                type="text"
+                                                displayMonths="displayMonths" 
+                                                navigation="navigation" 
+                                                outsideDays="outsideDays" 
+                                                showWeekNumbers="showWeekNumbers"
+                                                ngbDatepicker 
+                                                #d="ngbDatepicker" 
+                                                [(ngModel)]="modelExp.supportingDate"
+                                                required>
+                                                <div class="input-group-append">
+                                                <button class="btn btn-outline-secondary calendar" 
+                                                    style="font-size : 12px; height: 30px;" 
+                                                    (click)="d.toggle()" type="button">
+                                                    <fa-icon icon="calendar-alt"></fa-icon>
+                                                </button>
+                                                </div>
+                                                <div class="input-group-append">
+                                                    <button
+                                                        placement="right"
+                                                        ngbTooltip="Limpiar"
+                                                        class="btn btn-outline-secondary calendar"
+                                                        style="font-size : 12px; height: 30px;" 
+                                                        (click)="clear(modelExp)" type="button">
+                                                        <fa-icon icon="eraser"></fa-icon>
+                                                    </button>
+                                                </div>
+                                            </div>            
+                                        </div>
+                                    </td>
+                                    <td class="col-2">
+                                        {{modelExp.expenditureTypeName}}
+                                    </td>    <!-- filas para agregar-->
+                                    <td class="col-5">
+                                        <div *ngIf="!modelExp.disabled" (click)="modelExp.disabled=!modelExp.disabled" style="white-space : normal;">
+                                            {{modelExp.description}}
+                                        </div>
+                                        <textarea 
+                                            style="height: 120px; resize: none;"
+                                            *ngIf="modelExp.disabled"
+                                            class="form-control"
+                                            type="text" 
+                                            name="description{{modelExp.orderNumber}}" 
+                                            #description{{modelExp.orderNumber}}="ngModel"
+                                            [(ngModel)]="modelExp.description">
+                                        </textarea>
+                                    </td>
+                                    <td class="col-1">
+                                        <input 
+                                            class="input-destiny" 
+                                            name="amount{{modelExp.orderNumber}}"
+                                            [ngModel]="modelExp.accountedForAmount | currency "
+                                            (ngModelChange)="validateAmount(modelExp, $event)"
+                                            required>
+                                    </td>
+                                    <td class="col-1 text-center">
+                                        <a  style="width: inherit;cursor:pointer;"
+                                            href="#"
+                                            routerLink="{{router.url}}"
+                                            placement="top" 
+                                            triggers="click"
+                                            [ngStyle]="{'color': (modelExp.imagesDto?.length === 0 || !modelExp.imagesDto ) ? 'gray' : '#007bff'}"
+                                            [autoClose]="'outside'"
+                                            [ngbTooltip]="viewDeleteImage"
+                                            rel="noopener noreferrer">
+                                            <fa-icon class="fa-lg" icon="image"></fa-icon>
+                                            <span class="small mr-1">({{ modelExp.imagesDto?.length }})</span>
+                                            <!--<img  
+                                                style="width: inherit; height: 40px;" 
+                                                [src]="modelExpStatic.urlImage">-->
+                                        </a>
+
+                                        <ng-template #viewDeleteImage class="form-row">
+                                            <div style="border: 1px black solid;" 
+                                                class="bg-white text-dark" 
+                                                *ngFor="let image of modelExp.imagesDto;let i=index">
+                                                <div class="small">
+                                                    <b>{{image.name}}</b>
+                                                </div>
+                                                
+                                                <img  
+                                                    class="mr-1"
+                                                    style="width: inherit; cursor:pointer; height: 50px; width: 71px;" 
+                                                    (click)="lightbox.open([{path : image.urlImages}])" 
+                                                    [src]="image.urlImages">
+                                                <a
+                                                    style="width: inherit;cursor:pointer;"
+                                                    href="#"
+                                                    routerLink="{{router.url}}"
+                                                    (click)="deleteImage(modelExp, i)" 
+                                                    rel="noopener noreferrer">
+                                                    <fa-icon class="fa-lg" 
+                                                        style="color: red;" 
+                                                        icon="trash-alt"></fa-icon>
+                                                </a>
+                                            </div>
+                                        </ng-template>
+                                        <input 
+                                            class="inputfile" 
+                                            type="file"
+                                            name="file{{modelExp.orderNumber}}" 
+                                            id="file{{modelExp.orderNumber}}" 
+                                            (change)="onSelectFile(modelExp,$event)" 
+                                            ng2FileSelect
+                                            [uploader]="uploader"
+                                            style="display:none" 
+                                            value="Cambiar"
+                                            multiple
+                                            required />
+                                            <label 
+                                                for="file{{modelExp.orderNumber}}"
+                                                id="file{{modelExp.orderNumber}}" 
+                                                style="left: 27px;">
+                                                <fa-icon 
+                                                    style="cursor:pointer" 
+                                                    icon="upload" 
+                                                    class="fa-lg mr-2">
+
+                                                </fa-icon>
+                                            </label>
+
+                                        <a 
+                                            class="mr-2"
+                                            (click)="modelExp.disabled=!modelExp.disabled"
+                                        >
+                                            <fa-icon class="fa-lg" ngbTooltip="Editar" placement="top" *ngIf="!modelExp.disabled" icon="edit"></fa-icon>
+                                            <fa-icon class="fa-lg" ngbTooltip="Guardar" placement="top" *ngIf="modelExp.disabled" icon="save"></fa-icon>
+                                        </a>
+                                        <a  
+                                            placement="bottom" 
+                                            ngbTooltip="Eliminar" 
+                                            class=""
+                                            (click)="removeExpenditure(modelExp)">
+                                            <fa-icon 
+                                                style="color: red;cursor:pointer" 
+                                                class="fa-lg" icon="trash">
+                                            </fa-icon>
+                                        </a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                    </table> 
+                </div>
+
+                <div class="text-center">
+                    <label for=""><b><ul>Articulos e Incisos</ul></b></label>
+                </div>
+
+                <div class="form-row">
+                    <ul *ngFor="let f of firstItem">
+                        <li class="d-inline-block mb-1 ml-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input 
+                                    [disabled]="f.default"
+                                    [(ngModel)]="f.checked"
+                                    name="{{f.id}}" 
+                                    value="{{f.checked}}"
+                                    type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="customCheck12{{f.id}}">
+                                    <label class="custom-control-label" 
+                                    for="customCheck12{{f.id}}">{{f.description}}
+                                    </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-row">
+                    <ul *ngFor="let p of allApprovedOrder3">
+                        <li class="d-inline-block mb-1 ml-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input 
+                                    [disabled]="p.default"
+                                    [(ngModel)]="p.checked"
+                                    name="{{p.id}}" 
+                                    value="{{p.checked}}"
+                                    type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="customCheck2{{p.id}}">
+                                    <label class="custom-control-label" 
+                                    for="customCheck2{{p.id}}">{{p.description}}
+                                    </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-row">
+                    <ul *ngFor="let l of lastItem">
+                        <li class="d-inline-block mb-1 ml-auto">
+                            <div class="custom-control custom-checkbox">
+                                <input 
+                                    [disabled]="l.default"
+                                    [(ngModel)]="l.checked"
+                                    name="{{l.id}}"
+                                    type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="customCheck3{{l.id}}">
+                                    <label class="custom-control-label" 
+                                    for="customCheck3{{l.id}}">{{l.description}}
+                                    </label>
+                            </div>
+                        </li>
+
+                    </ul>
+                </div>
+
+                <div class="text-center">
+                    <label for=""><b><ul>Comprobación de la realización de la comisión</ul></b></label>
+                </div>
+                <div class="form-row">
+                    <ul *ngFor="let i of allApprovedOrder1" class="d-inline-block mb-1 ml-auto">
+                        <li style="list-style: none;">
+                            <div class="custom-control custom-checkbox">
+                                <input 
+                                    [disabled]="i.default"
+                                    [(ngModel)]="i.checked"
+                                    name="{{i.id}}" 
+                                    value="{{i.checked}}"
+                                    type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="customCheck1{{i.id}}">
+                                    <label class="custom-control-label" 
+                                    for="customCheck1{{i.id}}">{{i.description}}
+                                    </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="text-center">
+                    <label for=""><b><ul>Visación de autoridad que ordeno la comisión</ul></b></label>
+                </div>
+
+                <div class="form-col">
+                    <ul *ngFor="let i of allApprovedOrder2">
+                        <li style="list-style: none;">
+                            <div class="custom-control custom-checkbox">
+                                <input 
+                                    [disabled]="i.default"
+                                    [(ngModel)]="i.checked"
+                                    name="{{i.id}}" 
+                                    value="{{i.checked}}"
+                                    type="checkbox" 
+                                    class="custom-control-input" 
+                                    id="customCheck2{{i.id}}">
+                                    <label class="custom-control-label" 
+                                    for="customCheck2{{i.id}}">{{i.description}}
+                                    </label>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-row">
+                    <a href="#" routerLink="{{router.url}}" class="btn btn-success" (click)="add()">
+                        <fa-icon icon="plus"></fa-icon> Observaciones
+                    </a>
+                </div>
+                <div class="p-1" style="min-height: 300px;">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr class="form-row">
+                            <th class="col">Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let obs of model.observations" class="form-row">
+                            <td class="col">
+                                <input 
+                                type="text"
+                                class="form-control"
+                                [hidden]="obs.hidden"
+                                [(ngModel)]="obs.description"
+                                name="description1{{obs.id}}"
+                                #description1="ngModel">
+                                <textarea 
+                                class="form-control"
+                                [hidden]="!obs.hidden"
+                                type="text"
+                                [(ngModel)]="obs.description"
+                                name="description{{obs.id}}"
+                                #description1="ngModel"
+                                style="resize: none;height: 112px;">
+                                </textarea>
+                            </td>
+                            <td class="col-1">
+                                <a 
+                                placement="bottom" 
+                                ngbTooltip="expandir"
+                                (click)="hidden(obs)"
+                                class="pr-3">
+                                <fa-icon 
+                                    class="fa-lg"
+                                    style="color : gray;" 
+                                    icon="expand"></fa-icon>
+                                </a>
+                                <a 
+                                placement="bottom" 
+                                ngbTooltip="eliminar"
+                                class="pr-2"
+                                (click)="remove(obs)">
+                                <fa-icon 
+                                    class="fa-lg" 
+                                    style="color : red;" 
+                                    icon="trash"></fa-icon>
+                                </a>
+                            </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="form-row float-right" >
+                    <button 
+                        [disabled]="!solicitationSubsidy.valid" 
+                        style="font-size: 12px;"
+                        class="btn btn-success small">
+                        <fa-icon class="fa-lg" icon="save"></fa-icon> Guardar
+                    </button>
+                </div>
+        
+        
+            </form>
+            <div class="alert alert-danger ml-4 mr-4" *ngIf="msj">
+                <ul>
+                    <li>{{msj}}</li>
+                </ul>
+            </div>
+            <div class="alert alert-danger ml-4 mr-4" *ngIf="msjExito">
+                <ul>
+                    <li>
+                        {{msjExito}}
+                    </li>
+                </ul>
+            </div>
+        
+            <!--<div *ngIf="solicitationSubsidy.form.invalid && (solicitationSubsidy.dirty || solicitationSubsidy.touched)" 
+                class="alert alert-danger mt-5">
+                <div>
+                        Hay Campos erroneos en el formulario, verifiquelos
+                </div>
+            </div>   --> 
+    </div>
+    <ngx-spinner 
+        name="saving"
+        bdColor="rgba(51,51,51,0.8)"
+        size="medium"
+        color="#fff"
+        type="ball-clip-rotate-multiple">
+        <p style="font-size: 20px; color: white">Aguarde un momento...</p>
+    </ngx-spinner>
+</div>
+

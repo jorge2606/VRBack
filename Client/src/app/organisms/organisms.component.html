@@ -1,0 +1,79 @@
+<div class="d-inline-block">
+	<a *ngIf="organimCreate" href="" class="btn btn-success ml-2" routerLink="create">
+		<fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+	</a>
+
+	<label class="d-inline-block ml-2" for="">Nombre </label>
+	<div class="d-inline-block ml-2 mt-1">
+		<input (keyup)="findWhileWrite()" [(ngModel)]="filters.name" type="text" class="form-control">
+	</div>
+</div>
+
+
+<div class="p-2" style="min-height: 300px;">
+	<table class="table table-striped">
+			<thead>
+				<tr style="font-weight: bold;">
+					<td>Nombre</td>
+					<td>Descripción</td>
+					<td></td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let org of organism">
+					<td>{{org.name}}</td>
+					<td>{{org.description}}</td>
+					<td class="text-center"><a 
+							placement="bottom" 
+							ngbTooltip="Ver las reparticiones de este organismo" 
+							href="" routerLink="/organism/distributions/{{org.id}}">Reparticiones
+						</a>
+					</td>
+					<td class="text-right">
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<a 
+								*ngIf="organimEdit"
+								placement="bottom" 
+								ngbTooltip="Editar" 
+								class="pr-3" routerLink="/organism/update/{{org.id}}">
+								<fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+							</a>
+							<a 
+								*ngIf="organimDelete"
+								placement="bottom" 
+								ngbTooltip="Eliminar" 
+								class="pr-3"
+								routerLink="/organism" (click)="openEliminar(org.id,org.name,org.description)">
+								<fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+							</a>
+							<a 
+							*ngIf="organimDelete"
+							placement="bottom" 
+							class="pr-3"
+							ngbTooltip="Viáticos realizados" 
+							routerLink="/organism/report/{{org.id}}">
+							<fa-icon class="fa-lg" style="color:black;" icon="file"></fa-icon>
+						</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<app-alert 
+			*ngIf="organism_list_length == 0"
+			[textAlert]="textListEmpty"
+			[typeAlert]="classListEmpty">			
+		</app-alert>
+
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination">
+</ngb-pagination>

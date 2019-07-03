@@ -1,0 +1,147 @@
+ <!--       <label class="d-inline-block p-2" for="">Nombre</label>
+        <div class="d-inline-block p-2 col-md-2">
+          <input (keyup)="filter()" [(ngModel)]="filters.firstName" type="text" class="form-control">
+        </div>
+    
+        <label class="d-inline-block p-2" for="">Apellido</label>
+        <div class="d-inline-block p-2 col-md-2">
+          <input (keyup)="filter()" [(ngModel)]="filters.lastName" type="text" class="form-control">
+        </div>
+    
+        <label class="d-inline-block p-2" for="">D.N.I</label>
+        <div class="d-inline-block p-2 col-md-2">
+          <input (keyup)="filter()" [(ngModel)]="filters.dni" type="number" class="form-control">
+        </div>
+      -->
+    <div class="p-3" style="min-height: 300px;">
+        <table  class="table table-striped">
+          <thead>
+            <tr class="form-row">
+              <th class="col"></th>
+              <th class="col-md-2">Agente</th>
+              <th class="col-md-1">Creación</th>
+              <th class="col-md-2">Objeto</th>
+              <th class="col-md-2">Localidades-Itinerario</th>
+              <th class="col-1 text-right">Total</th>
+              <th class="col-2">Estado</th>
+              <th class="col"></th>
+            </tr>
+          </thead>
+          <tbody *ngFor="let sol of solicitationSubsidies">
+            <tr class="form-row" [ngClass]="{
+                  'bg-white text-black' : (sol.daysWeekEnd + sol.daysHolidays ) <= 5, 
+                  'bg-warning text-white' : (sol.daysWeekEnd + sol.daysHolidays ) >= 6 && (sol.daysWeekEnd + sol.daysHolidays ) <= 8,
+                  'bg-danger text-white' : (sol.daysWeekEnd + sol.daysHolidays ) >= 9 }">
+              <td class="col text-center">
+                <fa-icon 
+
+                  placement="right"
+                  ngbTooltip="Fines de semana : {{sol.daysWeekEnd}} Feriados :  {{sol.daysHolidays}}"
+                  class="{{sizeIcon}}"    
+                  icon="info-circle">
+                </fa-icon>
+              </td>
+              <td class="col-md-2">{{sol.fullName}}</td>
+              <td class="col-md-1">{{sol.createDate | date:'dd/MM/yyyy'}}</td>
+              <td class="col-md-2 no-wrap" 
+                placement="bottom" 
+                ngbTooltip="{{sol.motive}}">{{sol.motive}}</td>
+              <td class="col-md-2">
+                <li *ngFor="let d of sol.destinies">
+                    <span *ngIf="d.countryName">{{d.countryName}}</span>
+                    <span *ngIf="d.provinceName && d.cityName">{{d.provinceName}} - {{d.cityName}}</span>          
+                </li>  
+                <span class="" > {{ sol.localities }}</span>       
+              </td>
+              <td class="col-1 text-right">{{sol.total | currency}}</td>
+              <td class="col-2">{{sol.state}}</td>
+              <td class="col text-center">
+                <div class="btn-group" role="group" aria-label="Basic example">
+                  <a 
+                    *ngIf="sol.stateId != this.stateService.Postergado.toLocaleLowerCase() && sol.aprovedByFirstInstance === this.authService.userId('id')"
+                    href="" 
+                    class="pr-3"
+                    (click)="pospone(sol)"
+                    routerLink="{{router.url}}">
+                    <fa-icon 
+                      class="{{sizeIcon}}" 
+                      *ngIf="sol.stateId != this.stateService.Postergado.toLocaleLowerCase()" 
+                      style="color:gray;" 
+                      icon="clock"
+                      ngbTooltip="Posponer"
+                      placement="left"></fa-icon>
+                    <fa-icon 
+                      class="{{sizeIcon}}" 
+                      *ngIf="sol.stateId == this.stateService.Postergado.toLocaleLowerCase()" 
+                      style="color:gray;" 
+                      icon="plus-circle"
+                      ngbTooltip="Observaciones"
+                      placement="left"></fa-icon>
+                  </a>
+                  <a 
+                    *ngIf="(sol.state == 'Rendición Aprobada 1ra. Instancia' || sol.state == 'Rendido')
+                      && !sol.isRefund"
+                    href="" 
+                    placement="left" 
+                    ngbTooltip="Detalle"
+                    class="pr-3" routerLink="{{router.url}}"
+                    (click)="openDetailAccountFor(sol.id)">
+                  <fa-icon class="{{sizeIcon}}" style="color:gray;" icon="info-circle"></fa-icon>
+                  </a>
+                  <a 
+                    *ngIf="sol.state != 'Rendición Aprobada 1ra. Instancia' 
+                      && sol.state != 'Rendido'
+                      && !sol.isRefund"
+                    href="" 
+                    placement="left" 
+                    ngbTooltip="Detalle"
+                    class="pr-3" routerLink="{{router.url}}"
+                    (click)="openDetail(sol)">
+                    <fa-icon class="{{sizeIcon}}" style="color:gray;" icon="info-circle"></fa-icon>
+                  </a>
+                  
+                  <a 
+                    *ngIf="sol.state != 'Rendición Aprobada 1ra. Instancia' 
+                      && sol.state != 'Rendido' 
+                      && sol.isRefund"
+                    href="" 
+                    placement="bottom" 
+                    ngbTooltip="Detalle"
+                    class="pr-3" routerLink="{{router.url}}"
+                    (click)="openDetail(sol)">
+                    <fa-icon class="{{sizeIcon}}" style="color:gray;" icon="info-circle"></fa-icon>
+                  </a>
+
+                  <a 
+                    *ngIf="sol.aprovedByFirstInstance === this.authService.userId('id') && (pipeService.transform(sol.beginDate,'yyyy/MM/dd') >= today)"
+                    placement="bottom" 
+                    ngbTooltip="Eliminar" 
+                    class="pr-3" 
+                    routerLink="{{router.url}}" 
+                    (click)="openEliminar(sol)">
+                    <fa-icon class="{{sizeIcon}}" style="color:red;" icon="trash">
+                    </fa-icon>
+                  </a>
+                </div>
+              </td>
+              
+            </tr>
+          </tbody>
+        </table>
+
+        <app-alert 
+        *ngIf="col_size == 0" 
+        [textAlert]="textListEmpty"
+        [typeAlert]="classListEmpty">			
+      </app-alert>
+  </div>
+
+  <ngb-pagination 
+    *ngIf="col_size >= (itemsPerPage + 1)"
+    (pageChange)="loadPage($event)" 
+    [collectionSize]="col_size"
+    [pageSize]="itemsPerPage" 
+    [(page)]="filters.page"
+    class="ml-auto"
+    aria-label="Default pagination"></ngb-pagination>
+  

@@ -1,0 +1,47 @@
+<div class="modal-header bg-dark text-white">
+  <h4 class="modal-title">Notificaciones</h4>
+</div>
+<div class="modal-body">
+  <div class="text-center" *ngIf="col_size == 0">
+      No hay notificaciones para mostrar
+  </div>
+  <div *ngFor="let j of Contenido" >
+    <div class="form-row h-10 small alert" [ngClass]="{'alert-secondary': j.read,'alert-success' : !j.read}">   
+      <div class="col">
+            <p>{{j.textData}} <br> <b>{{j.days}}</b></p> <br>
+            <a 
+              href="#" 
+              routerLink="{{router.url}}" 
+              (click)="seeThisNotification(j)"> 
+              Ir a solicitud
+            </a>
+      </div> 
+
+      <div style="cursor: pointer;" class="ml-auto mt-4">
+          <a class="" (click)="delete(j.id)">
+              <fa-icon title="Eliminar notificación" class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+          </a>
+      </div>
+      
+         <!-- <button id="collapseExample{{j.id}}" type="button" class="btn btn-default mr-2 small" (click)="onChange(j)"
+                [attr.aria-expanded]="j.colapse" aria-controls="collapseExample">
+                <fa-icon icon="{{verOcultar}}"></fa-icon>
+          </button>-->
+      </div>
+      <!--<div id="{{j.id}}" class="text-justify pt-3 pb-3" [ngbCollapse]="!j.colapse">
+          <textarea class="form-control text-left" rows="5" readonly>{{j.textData}}</textarea>
+      </div>-->
+  </div>
+
+  <ngb-pagination 
+    *ngIf="col_size >= (itemsPerPage + 1)"
+    (pageChange)="loadPage($event)" 
+    [collectionSize]="col_size" 
+    [pageSize]="itemsPerPage" 
+    [(page)]="page"
+    aria-label="Default pagination"></ngb-pagination>
+
+</div>
+<div class="modal-footer">
+  <button type="button" [hidden]="ButtonHidden" class="btn btn-default" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+</div>

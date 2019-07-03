@@ -1,0 +1,14 @@
+<div class="modal-header bg-dark text-white">
+    <h4 class="modal-title">{{Encabezado}}</h4>
+  </div>
+  <div class="modal-body">
+    <div class="container {{ClassContainer}}">
+        {{Contenido}}
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn {{GuardaroEliminarClass}}" hidden="{{GuardaroEliminarHidden}}" (click)="activeModal.close('Close click')">{{GuardaroEliminar}}</button>
+    <button type="button" class="btn {{MsgCloseClass}}" hidden="{{MsgCloseHidden}}" (click)="activeModal.dismiss('Close click')">{{MsgClose}}</button>
+</div>
+    
+

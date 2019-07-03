@@ -1,0 +1,27 @@
+<div class="container col-md-6">
+  <div class="card mb-2">
+      <h5 class="card-header">Nuevo</h5>
+      <div class="card-body">
+        <form #form="ngForm" (ngSubmit)="onSubmit()">
+            <div class="form-group">
+              <input 
+                name="name"
+                [(ngModel)]="model.name"
+                #name="ngModel"
+                class="form-control" 
+                type="text" 
+                placeholder="Nombre"
+                required>
+            </div>    
+            <div *ngIf="name.invalid && form.submitted" class="alert alert-danger">
+                Campo inválido
+            </div>     
+            <div class="form-group mb-0">
+                <button class="btn btn-success" type="submit">
+                  <fa-icon icon="save"></fa-icon> Crear
+                </button>
+            </div>
+        </form>
+      </div>
+    </div>
+</div>

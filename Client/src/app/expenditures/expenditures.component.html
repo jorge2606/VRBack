@@ -1,0 +1,50 @@
+<a  
+	*ngIf="expenditureCreate"
+	href="" class="btn btn-success ml-2" routerLink="create">
+	<fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+</a>
+
+
+<div class="p-2" style="min-height: 300px;">
+	<table class="table table-striped">
+			<thead>
+				<tr style="font-weight: bold;">
+					<td>Nombre</td>
+					<td></td>
+				</tr>
+			</thead>
+			<tbody>
+				<tr *ngFor="let exp of expenditures">
+					<td>{{exp.name}}</td>
+					<td class="text-right">
+						<div class="btn-group" role="group" aria-label="Basic example">
+							<a
+								*ngIf="expenditureEdit"
+								placement="bottom" 
+								ngbTooltip="Editar"  
+								class="pr-3" routerLink="/expenditure/update/{{exp.id}}">
+								<fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+							</a>
+							<a 
+								*ngIf="expenditureDelete"
+								placement="bottom" 
+								ngbTooltip="Eliminar"
+								class="pr-3"  
+								routerLink="/expenditure" (click)="openEliminar(exp.id,exp.name,exp.description)">
+								<fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+							</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination">
+</ngb-pagination>

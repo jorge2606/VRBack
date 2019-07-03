@@ -1,0 +1,47 @@
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <td>Usuario Actual</td>
+      <td>Acción</td>
+      <td>Fecha</td>
+      <td>Ult. Cambios</td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let not of notifications">
+      <td>
+        {{not.auditUser}}
+      </td>
+      <td>
+        {{not.auditAction}}
+      </td>
+      <td>
+        {{not.auditDate | date:'dd/MM/yyyy (H:mm:ss) a'}}
+      </td>
+      <td>
+          <ul>
+              <li *ngIf="not.current.textData != not.previous.dni && not.previous.textData">
+                Texto : {{not.previous.textData}} --> {{not.current.textData}}
+              </li>
+              <li *ngIf="not.current.textData != not.previous.textData && !not.previous.textData">
+                Texto : {{not.current.textData}}
+              </li>
+              <li *ngIf="not.current.tittle != not.previous.tittle && not.previous.tittle">
+                Titulo : {{not.previous.tittle}} --> {{not.current.tittle}}
+              </li>
+              <li *ngIf="not.current.tittle != not.previous.tittle && !not.previous.tittle">
+                  Titulo: {{not.current.tittle}}
+              </li>
+              <li *ngIf="not.current.read != not.previous.read && not.previous.read">
+                Leido : <span *ngIf="not.previous.read">Si</span><span *ngIf="!not.previous.read">false</span> 
+                        --> 
+                        <span *ngIf="not.current.read">Si</span><span *ngIf="!not.current.read">No</span>
+              </li>
+              <li *ngIf="not.current.read != not.previous.read && !not.previous.read">
+                Leido : <span *ngIf="not.current.read">Si</span><span *ngIf="!not.current.read">No</span>
+              </li>
+          </ul>  
+      </td>
+    </tr>
+  </tbody>
+</table>

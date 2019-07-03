@@ -1,0 +1,67 @@
+<a class="btn btn-primary m-2" href="" routerLink="/users">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>
+<label class="d-inline-block pl-1 pr-1" for="">Nombre</label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+  <input (keyup)="findWhileWrite()" 
+      [(ngModel)]="filters.firstName" 
+      placeholder="Nombre de supervisor o agente ..."
+      type="text" 
+      class="form-control">
+</div>
+<label class="d-inline-block pl-1 pr-1" for="">Apellido</label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+  <input (keyup)="findWhileWrite()" 
+        [(ngModel)]="filters.lastName" 
+        placeholder="Apellido de supervisor o agente ..."
+        type="text" 
+        class="form-control">
+</div>
+<div class="m-2">
+    <table class="table table-striped responsive">
+        <thead>
+          <tr>
+            <th scope="col">Agente</th>
+            <th scope="col">Supervisor 1ra. de Instancia</th>
+            <th scope="col">Supervisor 2da. de Instancia</th>
+            <th scope="col"></th>
+          </tr>
+        </thead>
+        <tbody *ngFor="let a of agentsSupervisors">
+          <tr>
+            <td>{{a.agents.firstName}}, {{a.agents.lastName}}</td>
+            <td>
+              <span *ngIf="a.supervisors">{{a.supervisors.firstName}}, {{a.supervisors.lastName}}</span>
+            </td>
+            <td>
+                <span *ngIf="a.supervisors2">{{a.supervisors2.firstName}}, {{a.supervisors2.lastName}}</span>
+            </td>
+            <td class="text-center">
+              <a style="cursor:pointer" 
+              placement="bottom" 
+              ngbTooltip="Eliminar"
+              (click)="openEliminar(a.supervisors, a.agents)">
+                  <fa-icon 
+ 
+                    class="fa-lg" style="color:red;" 
+                    icon="trash"></fa-icon>
+              </a>
+            </td>
+          </tr>
+        </tbody>
+    </table>
+
+    <app-alert 
+      *ngIf="agentSupervisor_list_length == 0" 
+      [textAlert]="textListEmpty"
+      [typeAlert]="classListEmpty">			
+  </app-alert>
+
+  <ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination"></ngb-pagination>
+</div>

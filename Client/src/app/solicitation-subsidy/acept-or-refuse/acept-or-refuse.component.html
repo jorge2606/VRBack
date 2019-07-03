@@ -1,0 +1,131 @@
+
+<div id="container-pdf" class="">
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Solicitud de Viatico</h4><br>
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">Apellido, Nombre : {{lastName}}, {{firstName}} <br>
+          C.U.I.L : {{dni}}</h5>
+    </div>
+    <div class="modal-body">
+          <div class="form-row">
+              <label for="">Motivo</label>
+              <textarea 
+                rows="10" 
+                style="height: 100px;resize: none;" 
+                class="h-45 form-control" 
+                value="{{model.motive}}"
+                disabled>
+              
+              </textarea>
+          </div>
+
+          <div class="form-row">
+              <label for="">Destinos</label>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Fecha de Inicio</th>
+                    <th scope="col">Destino</th>
+                    <th scope="col">Transporte</th>
+                    <th scope="col">Dias</th>
+                    <th scope="col">$/Dia</th>
+                    <th scope="col">Cod. Liq.</th>
+                    <th scope="col">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let des of model.destinies">
+                    <td>
+                        {{des.startDate.day}}/{{des.startDate.month}}/{{des.startDate.year}}
+                      </td>
+                    <td>
+                      <li style="list-style-type: none;" *ngIf="des.countryName">{{des.countryName}}</li>
+                      <li style="list-style-type: none;" *ngIf="des.provinceName"> {{des.provinceName}} </li>
+                      <li style="list-style-type: none;" *ngIf="des.cityName">{{des.cityName}}</li>
+                    </td>
+                    <td>
+                      {{des.transportModel}} - {{des.transportBrand}}
+                    </td>
+                    <td>
+                      {{des.days}}
+                    </td>
+                    <td>
+                      {{des.advanceCategory | currency}}
+                    </td>
+                    <td>
+                      {{des.percentageCodeLiquidation}}
+                    </td>
+                    <td>
+                        {{des.days * des.advanceCategory * des.percentageCodeLiquidation }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>  
+          
+          <div class="form-row">
+              <label for="">Gastos</label>
+              <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">Importe</th>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col" *ngIf="model.isRefund"></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let exp of model.expenditures">
+                    <td>
+                      {{exp.amount}}
+                    </td>
+                    <td>
+                      {{exp.expenditureTypeName}}
+                    </td>
+                    <td>
+                      {{exp.description}}
+                    </td>
+                    <td *ngIf="model.isRefund"
+                      placement="bottom" 
+                      ngbTooltip="Ver imagen"
+                      class="text-center p-0">
+                      <a  
+                          style="width: inherit;cursor: pointer;"
+                          (click)="lightbox.open([{path: exp.urlImage }])" 
+                          rel="noopener noreferrer">
+                          <fa-icon class="{{sizeIcon}}" style="color:gray;" icon="image"></fa-icon>
+                      </a>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+          </div>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="ml-auto">
+                <label for="" class="col"><b>Total: {{model.total | currency}}</b></label> 
+            </div>
+          </div>
+    </div>
+  </div>
+  <div class="modal-footer mt-6 ml-auto">
+      <button routerLink="{{router.url}}" type="button" (click)="acepted()" class="btn btn-success">
+        Aceptar
+      </button>
+      <button routerLink="{{router.url}}" type="button" (click)="AddMotive('reject','Motivo de Rechazo')" 
+        class="btn btn-danger">
+        Rechazar
+      </button>
+  </div> 
+
+  <div *ngIf="msjSuccess" class="alert alert-success mt-1">
+      {{msjSuccess}}
+  </div>
+
+  <div *ngIf="msjError" class="alert alert-danger mt-1">
+      {{msjError}}
+  </div>
+

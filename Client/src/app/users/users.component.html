@@ -1,0 +1,148 @@
+	<div *ngIf="create" class="d-inline-block ml-2 mr-1">
+		<a 	href="" 
+			class="btn btn-success" 
+			routerLink="create">
+			<fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+		</a>
+	</div>
+
+	<!--<div class="d-inline-block mt-0 mb-1 mr-1" *ngIf="addSupervisor">
+		<button class="btn btn-success" [disabled]="users_check.length == 0" (click)="AddSupervisor()">
+			Enlazar a Supervisor
+		</button>
+	</div>-->
+	<div *ngIf="toSeeRelationshipBeetwenSupervisorAndAgent" class="d-inline-block mt-0 mb-1">
+			<a href="" class="btn btn-success" 
+				routerLink="/users/AgentsAndSupervisors"
+				placement="bottom" 
+				ngbTooltip="Ver supervisor/es y agentes relacionados">
+				Supervisores <fa-icon class="fa-lg" icon="user-tie"></fa-icon> Agentes
+			</a>
+	</div>
+<br>
+<label class="d-inline-block ml-2" for="">Repartición </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<select  (change)="filterList()" [(ngModel)]="filters.distributionId" 
+		class="form-control d-inline-block pl-1">
+		<option value=""></option>
+		<option *ngFor="let dist of distributions" value="{{dist.id}}">
+			{{dist.name}}
+		</option>
+	</select>
+</div>
+
+<label class="d-inline-block pl-1 pr-1" for="">Nombre </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<input (keyup)="findWhileWrite()" [(ngModel)]="filters.firstName" type="text" class="form-control">
+</div>
+<label class="d-inline-block pl-1 pr-1" for="">D.N.I </label>
+<div class="d-inline-block pl-1 pr-1 col-md-3 mb-1">
+	<input (keyup)="findWhileWrite()" [(ngModel)]="filters.dni"  type="number" class="form-control">
+</div>
+
+
+<div style="min-height: 300px;" class="p-2">
+	<table class="table table-striped responsive">
+		<thead>
+			<tr style="font-weight: bold;">
+				<th scope="col" *ngIf="addSupervisor">
+				
+					<div class="custom-control custom-checkbox">
+						<input 
+							type="checkbox" 
+							class="custom-control-input" 
+							id="customCheck1"
+							[checked]="allCheckedProperty" 
+							(change)="allChecked()"
+							>
+							<label class="custom-control-label" 
+							for="customCheck1">({{this.users_check.length}})
+							</label>
+					</div>
+				</th>
+				<th scope="col">D.N.I</th>
+				<th scope="col">Nombre</th>
+				<th scope="col">Apellido</th>
+				<th scope="col">Repartición</th>
+				<th class="text-center" scope="col">Roles</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let user of user_list">
+				<td *ngIf="addSupervisor">
+					<div class="custom-control custom-checkbox">
+						<input 
+						type="checkbox" 
+						name="checked"
+						class="custom-control-input" 
+						id="customCheck{{user.id}}"
+						value="{{user.id}}"
+						[(ngModel)]="user.checked"
+						[checked]="user.checked"
+						(change)="check(user)">
+						<label class="custom-control-label" 
+							for="customCheck{{user.id}}">
+						</label>
+					</div>
+				</td>
+				<td>{{user.dni}}</td>
+				<td>{{user.firstName}}</td>
+				<td>{{user.lastName}}</td>
+				<td>{{user.distribution.name}}</td>
+				<td class="text-center">{{user.rol}}</td>
+				<td>
+					<div class="btn-group" role="group" aria-label="Basic example">
+						<a 
+							*ngIf="edit"
+							style="cursor:pointer" class="pr-3" routerLink="/users/update/{{user.id}}">
+							<fa-icon 
+								placement="top" 
+								ngbTooltip="Editar"
+								class="fa-lg" 
+								style="color:gray;" 
+								icon="edit"></fa-icon>
+						</a>
+						<a 
+							*ngIf="delete"
+							class="pr-3"
+							style="cursor:pointer" (click)="openEliminar(user.id,user.dni,user.userName)">
+							<fa-icon 
+								placement="top" 
+								ngbTooltip="Eliminar" 
+								class="fa-lg" 
+								style="color:red;" 
+								icon="trash"></fa-icon>
+						</a>
+						<a 
+							routerLink="report/{{user.id}}"
+							style="cursor:pointer">
+							<fa-icon 
+								placement="top" 
+								ngbTooltip="viáticos realizados"
+								style="color:black;"  
+								class="fa-lg"  
+								icon="file"></fa-icon>
+						</a>
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<app-alert 
+		*ngIf="user_list_length == 0" 
+		[textAlert]="textListEmpty"
+		[typeAlert]="classListEmpty">			
+	</app-alert>
+		
+</div>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination"></ngb-pagination>
+		
+

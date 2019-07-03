@@ -1,0 +1,110 @@
+    
+<form (ngSubmit)="addNewConcept()" #addNewExpForm="ngForm" action="">
+
+    <div class="modal-header bg-dark text-white">
+            <h4 class="modal-title">Nuevo concepto de gasto</h4>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="">Gastos</label>
+                        <select required class="form-control" #expenditureId="ngModel" name="expenditureId" 
+                                [(ngModel)]="modelExp.id" required>
+                                <option *ngIf="selectedExpenditure == modelExp.id" [ngValue]="selectedExpenditure" disabled>
+                                        Seleccione un concepto...
+                                </option>
+                                <option *ngFor="let exp of expendituresCbox" value="{{exp.id}}">{{exp.name}}</option>
+                        </select>
+
+                        <div *ngIf="expenditureId.invalid && addNewExpForm.submitted" 
+                            class="alert alert-danger mt-1">
+                            <div *ngIf="expenditureId.errors">
+                                <div *ngIf="expenditureId.errors.required">
+                                    Campo requerido.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4 mb-0">
+                        <div class="">
+                            <label for="">Importe</label>
+                        </div>
+                        
+                        <input required 
+                            [(ngModel)]="modelExp.amount" 
+                            #amount="ngModel" 
+                            name="amount" 
+                            class="form-control text-right" 
+                            value="{{modelExp.amount}}" 
+                            required 
+                            minlength="1" 
+                            maxlength="8">
+                    </div>
+                    <div class="w-100"></div>
+
+                    <div *ngIf="amount.invalid && addNewExpForm.submitted"
+                    class="alert alert-danger mt-1 ml-1">
+                        <div *ngIf="amount.errors">
+                            <div *ngIf="amount.errors.required">
+                                Campo requerido.
+                            </div>
+                            <div *ngIf="amount.errors.minlength">
+                                Debe contener al menos un digíto
+                            </div>
+                            <div *ngIf="amount.errors.maxlength">
+                                No debe contener mas de 8 digítos
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                            <label for="">Descripción</label>
+                            <textarea required [(ngModel)]="modelExp.description" 
+                            #description="ngModel" 
+                            value="{{modelExp.description}}"
+                            placeholder="Ingrese la descripción"
+                            name="description" 
+                            class="form-control" 
+                            [maxlength]="150"
+                            type="text"
+                            style="resize : none;"></textarea>
+                            {{description.maxlength}}
+                            <div *ngIf="description.maxlength == 149">
+                                Solo se permiten 150 caracteres
+                            </div>
+                            <div *ngIf="description.invalid && addNewExpForm.submitted"
+                                class="alert alert-danger mt-1">
+                                <div *ngIf="description.errors">
+                                    <div *ngIf="description.errors.required">
+                                        Campo requerido.
+                                    </div>
+                                    <div *ngIf="description.errors.minlength">
+                                        Debe contener al menos un digíto
+                                    </div>
+                                    <div *ngIf="description.errors.maxlength">
+                                        No debe contener mas de 4 digítos
+                                    </div>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+            
+            <div *ngIf="msgExist" class="alert alert-danger">
+                {{msgExist}}
+            </div>
+        </div>
+    </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default mr-auto" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+        <button type="submit" class="btn btn-success" [disabled]="!addNewExpForm.valid">Agregar</button>
+      </div>
+
+</form>

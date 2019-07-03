@@ -1,0 +1,73 @@
+﻿@model VR.Dto.User.CreateUserHtmlDto
+@{
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .table {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+
+        .buttonAccept {
+            background-color: #ABEBC6;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 23px;
+        }
+
+        .buttonAccept:hover {
+            background-color: #2ECC71;
+        }
+
+        .firstParagraph{
+            text-indent: 21%;
+        }
+        .thirdParagraph{
+            text-indent: 22%;
+        }
+        .fourParagraph{
+            text-indent: 22%;
+        }
+
+        .container {
+            padding: 10px;
+            border: 2px black solid;
+        }
+
+        .divAccept{
+            text-align: center;
+        }
+    </style>
+    <meta charset="utf-8"/>
+    <title></title>
+</head>
+<body >
+<div class="container">
+    <p>Sr./Sra.  @Model.LastName, @Model.FirstName, <br /><p>
+    <p class="firstParagraph">Usted fue dado de alta al sistema con las siguientes credenciales.</p>
+    <p class="thirdParagraph">-Usuario: @Model.UserName <br></p>
+    <p class="fourParagraph">
+        -Contraseña: @Model.Password
+    </p>
+    <p class="firstParagraph">
+        Ingrese al siguiente enlace. <a href="@Model.CallbackUrl"> Ir a la página principal. </a>
+    </p>
+    <div class="divAccept">
+            
+    </div><br>
+    <p>Saludos.</p>
+
+</div>
+</body>
+</html>

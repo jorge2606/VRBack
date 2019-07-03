@@ -1,0 +1,105 @@
+<div class="ml-2 mt-1">
+  <div class="d-inline-block ml-2">
+      <a class="btn btn-success mb-1" routerLink="/administrativeResolution/create">
+        <fa-icon class="fa-lg" icon="plus"></fa-icon> Nuevo
+      </a>
+  </div>
+  
+  <label class="d-inline-block pl-1 pr-1" for="">Número </label>
+	<div class="d-inline-block">
+		<input (keyup)="findWhileWrite()" [(ngModel)]="filters.number"  type="text" class="form-control">
+  </div>
+  
+  <label class="d-inline-block pl-1 pr-1" for="">Descripción </label>
+	<div class="d-inline-block">
+		<input (keyup)="findWhileWrite()" [(ngModel)]="filters.description"  type="text" class="form-control">
+  </div>
+  
+  <label for="" class="d-inline-block pl-1 pr-1">Fecha</label>
+  <div class="d-inline-block">
+      <div class="form-group">
+          <div class="input-group">
+            <input 
+              (dateSelect)="findWhileWrite()"
+              (keyup)="findWhileWrite()"
+              class="form-control" 
+              placeholder="dd/mm/yyyy"
+              name="dp" 
+              [readonly]="true"
+              type="text"
+              displayMonths="displayMonths" 
+              navigation="navigation" 
+              outsideDays="outsideDays" 
+              showWeekNumbers="showWeekNumbers"
+              ngbDatepicker 
+              #d="ngbDatepicker" 
+              [(ngModel)]="filters.date"
+              >
+            <div class="input-group-append">
+              <button class="btn btn-outline-secondary calendar" (click)="d.toggle()" type="button">
+                  <fa-icon icon="calendar-alt"></fa-icon>
+              </button>
+            </div>
+            <div class="input-group-append">
+                <button
+                    placement="right"
+                    ngbTooltip="Limpiar"
+                    class="btn btn-outline-secondary calendar" (click)="clear()" type="button">
+                    <fa-icon icon="eraser"></fa-icon>
+                </button>
+              </div>
+          </div>            
+        </div>
+  </div>
+</div>
+
+<table class="table table-striped">
+  <thead>
+    <tr style="font-weight: bold;">
+      <td>Número</td>
+      <td>Descripción</td>
+      <td>Fecha</td>
+      <td></td>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let l of legalRulings">
+      <td>{{l.number}}</td>
+      <td>{{l.description}}</td>
+      <td>
+        {{l.date.day +"/"+l.date.month+"/"+l.date.year}}
+      </td>
+      <td class="text-right">
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <a 
+            placement="bottom" 
+            ngbTooltip="Editar" 
+            class="pr-3" routerLink="/administrativeResolution/update/{{l.id}}">
+            <fa-icon class="fa-lg" style="color:gray;" icon="edit"></fa-icon>
+          </a>
+          <a 
+            placement="bottom" 
+            ngbTooltip="Eliminar"
+            class="pr-3"
+            routerLink="/administrativeResolution" (click)="openEliminar(l)">
+            <fa-icon class="fa-lg" style="color:red;" icon="trash"></fa-icon>
+          </a>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<app-alert 
+  *ngIf="legal_list_length == 0" 
+  [textAlert]="textListEmpty"
+  [typeAlert]="classListEmpty">			
+</app-alert>
+
+<ngb-pagination 
+	*ngIf="col_size >= (itemsPerPage + 1)"
+	(pageChange)="loadPage($event)" 
+	[collectionSize]="col_size" 
+	[pageSize]="itemsPerPage" 
+	[(page)]="page"
+	aria-label="Default pagination"></ngb-pagination>

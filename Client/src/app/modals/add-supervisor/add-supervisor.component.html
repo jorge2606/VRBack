@@ -1,0 +1,59 @@
+  <div class="modal-header card m-1 bg-dark text-white">
+    <h4 class="modal-title pull-left">Asignar Supervisor</h4>
+  </div>
+  <div class="modal-body">
+    <div class="row">
+
+        <div class="col card ml-1">
+            <label for="" class="text-center" style="border-bottom: solid 1px black;">
+                Agentes
+            </label>
+            <ul *ngFor="let user of usersSelected" class="p-0">
+                <li style="list-style: none;">
+                    <fa-icon class="fa-lg" icon="check"></fa-icon>
+                    {{user.lastName}}, {{user.firstName}} 
+                </li>
+            </ul>
+        </div>
+
+        <div class="col-2">
+            <div style="position: relative; top: 13px; left: 44px;">
+                <fa-icon class="fa-lg" icon="arrows-alt-h"></fa-icon>
+            </div>
+            
+        </div>
+
+        <div class="col card ml-1 mr-1" >
+            <label for="" class="text-center" style="border-bottom: solid 1px black;">
+                Supervisores
+            </label>
+            <ul *ngFor="let s of supervisors" class="p-0">
+                <div class="custom-control custom-checkbox">
+                    <input 
+                        type="checkbox" 								
+                        class="custom-control-input" 
+                        id="customCheckAddSupervisor{{s.id}}"
+                        (click)="checkSupervisor(s)">
+                        <label class="custom-control-label" 
+                        for="customCheckAddSupervisor{{s.id}}">
+                        {{s.lastName}}, {{s.firstName}}
+                    </label>
+                </div>
+            </ul>
+        </div>
+    </div>
+
+
+    <!--<div *ngIf="msj" class="alert alert-danger">
+        <ul>{{ msj }}</ul>
+    </div>-->
+    
+  </div>
+
+  
+  <div class="modal-footer mt-1">
+      <button type="submit" (click)="save()" class="btn btn-success">Guardar</button>
+      <button type="button" class="btn btn-default" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+  </div>   
+
+

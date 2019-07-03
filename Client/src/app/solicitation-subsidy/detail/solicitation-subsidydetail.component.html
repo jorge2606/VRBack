@@ -1,0 +1,199 @@
+<div id="container-pdf" class="container small">
+    <div class="modal-header">
+
+      <h4 *ngIf="!model.isRefund" class="modal-title pull-left">Detalle de solicitud de víatico <span *ngIf="model.isCommission">
+        (Comisión Clave : {{model.randomKey}})        
+      </span> <br></h4>
+      <h4 *ngIf="model.isRefund" class="modal-title pull-left">Detalle de solicitud de reintegro <br></h4>
+      <button (click)="activeModal.dismiss('Close click')" type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-header">
+        <h5 class="modal-title">Apellido, Nombre : {{lastName}}, {{firstName}} <br> C.U.I.L : {{dni}}</h5>
+    </div>
+    <div class="modal-body">
+          <div class="form-row">
+              <label class="classLabel" for="">Motivo</label>
+              <textarea 
+                rows="10" 
+                style="height: 100px; resize: none; font-size: unset;" 
+                class="h-45 form-control" 
+                value="{{model.motive}}"
+                disabled>
+              
+              </textarea>
+          </div>
+
+          <div class="form-row">
+              <label class="classLabel" for="">Destinos</label>
+              <table class="table table-striped" style="padding :0;">
+                <thead>
+                  <tr class="text-center" >
+                      <th scope="col" class="classTh p-0">Fecha</th>
+                      <th scope="col" class="classTh p-0">Destino</th>
+                      <th scope="col" class="classTh p-0">Transporte</th>
+                      <th scope="col" class="classTh p-0 text-right">Dias</th>
+                      <th scope="col" class="classTh p-0 text-right">Dias c/Gastos</th>
+                      <th scope="col" class="classTh p-0 text-right">$/Dia</th>                      
+                      <th scope="col" class="classTh p-0 text-right">Cod. Liq.</th>
+                      <th scope="col" class="classTh p-0 text-right">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let des of model.destinies">
+                    <td *ngIf="posponed" class="p-1">
+                      <div class=".form-group { width : 56% !important; height : 11px !important;">
+                            <div class="input-group">
+                                <input 
+                                  class="form-control"
+                                  style="width: 94px; font-size : 12px; height: 19px;" 
+                                  placeholder="dd/mm/yyyy"
+                                  name="dp{{des.id}}" 
+                                  [readonly]="true"
+                                  type="text"
+                                  displayMonths="displayMonths" 
+                                  navigation="navigation" 
+                                  outsideDays="outsideDays" 
+                                  showWeekNumbers="showWeekNumbers"
+                                  ngbDatepicker 
+                                  #d="ngbDatepicker" 
+                                  [(ngModel)]="des.startDate"
+                                  required>
+                                <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar text-center"
+                                    style="font-size: 2px;width: 24px;height: 19px;" 
+                                    (click)="d.toggle()" type="button">
+                                    <fa-icon icon="calendar-alt"></fa-icon>
+                                </button>
+                                </div>
+                                <div class="input-group-append">
+                                    <button
+                                        style="font-size: 2px;width: 24px;height: 19px;" 
+                                        placement="right"
+                                        ngbTooltip="Limpiar"
+                                        class="btn btn-outline-secondary calendar text-center" (click)="clear(des)" type="button">
+                                        <fa-icon icon="eraser"></fa-icon>
+                                    </button>
+                                </div>
+                            </div>            
+                      </div>
+                    </td>
+                    <td class="p-1" *ngIf="!posponed">
+                        {{des.startDate.day}}/{{des.startDate.month}}/{{des.startDate.year}}
+                    </td>
+                    <td class="p-1">
+                        <span *ngIf="des.countryId">{{des.countryName}} </span> 
+                        <span *ngIf="!des.countryId">{{des.provinceName}} - {{des.cityName}} </span>
+                        <span class="mr-1 cardInsideTd" *ngFor="let c of des.supplementaryCities"> 
+                            <span *ngIf="!des.countryId">, {{ c.name }}</span>
+                        </span>
+                    </td>
+                    <td class="p-1">
+                        {{des.transportModel}} - {{des.transportBrand}}
+                    </td>
+                    <td class="text-right p-1">
+                        {{des.days}}
+                    </td>
+                    <td class="text-right p-1">
+                      {{des.daysPay}}
+                    </td>
+                    <td class="text-right p-1">
+                        {{des.advanceCategory | currency}}
+                    </td>
+                    <td class="text-right p-1">
+                        {{des.percentageCodeLiquidation}}
+                    </td>
+                    <td class="text-right p-1">
+                        {{des.advanceCategory * des.daysPay * des.percentageCodeLiquidation | currency}}
+                    </td> 
+                  </tr>
+                </tbody>
+              </table>
+          </div>  
+
+          <div class="form-row">
+            <label class="classLabel" for="">Gastos</label>
+            <table class="table table-striped">
+              <thead>
+                <tr class="form-row">
+                  <th class="col-2 classTh" style="padding : 0px;">Concepto</th>
+                  <th class="col classTh" style="padding : 0px;">Descripción</th>
+                  <th class="col-2 text-right classTh" style="padding : 0px;">Importe</th>
+                  <th class="col-2 classTh" *ngIf="model.isRefund"></th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr class="form-row" *ngFor="let exp of model.expenditures">
+                  <td class="col-2" style="padding : 1px;">
+                    {{exp.expenditureTypeName}}
+                  </td>
+                  <td class="col" style="padding : 1px;">
+                    {{exp.description}}
+                  </td>
+                  <td class="col-2 text-right" style="padding : 1px;">
+                    {{exp.amount | currency}}
+                  </td>
+                  <td *ngIf="model.isRefund"
+                      placement="bottom" 
+                      ngbTooltip="Ver imagen"
+                      class="col-2 text-center">
+                      <a  
+                          style="width: inherit;cursor: pointer;"
+                          [ngStyle]="{'color': (!exp.urlImages || exp.urlImages?.length === 0 ) ? 'gray' : '#007bff'}"
+                          (click)="open(exp.urlImages)" 
+                          rel="noopener noreferrer">
+                          <fa-icon class="{{sizeIcon}}" style="color:gray;" icon="image"></fa-icon>
+                          ({{exp.urlImages?.length}})
+                      </a>
+                  </td>
+                </tr>
+              </tbody>
+              <div *ngIf="model.expenditures.length == 0" class="alert alert-primary text-center p-0">
+                Esta solicitud no posee conceptos de gasto.
+              </div>
+            </table>
+        </div>
+          
+    </div>
+
+    <div class="modal-body">
+        <div class="form-row">
+            <div class="col-3 form-inline ml-auto">
+                <label for="" class="col-2 classLabel mr-1">Total</label>
+                <input type="text" 
+                  disabled 
+                  style="font-size:unset;" 
+                  value="{{model.total | currency}}" 
+                  class="input-total col text-right small">
+            </div>
+          </div>
+    </div>
+</div>
+  <div class="modal-footer mt-6">
+    <div class="mr-auto">
+        <a routerLink="{{currentUrl}}" (click)="acepted()" class="btn btn-success small">
+            Aceptar
+        </a>
+    </div>
+    <div class="ml-auto">
+        <a routerLink="{{currentUrl}}" (click)="AddMotive('Motivo de Rechazo')" 
+            class="btn btn-danger small">
+            Rechazar
+        </a>
+    </div>
+    
+    <!--<div col="col ml-auto">
+        <button type="button" class="btn btn-default" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+    </div>-->
+  </div> 
+
+<ngx-spinner 
+    bdColor="rgba(51,51,51,0.8)"
+    size="medium"
+    color="#fff"
+    type="ball-clip-rotate-multiple">
+    <p style="font-size: 20px; color: white">Aguarde un momento...</p>
+</ngx-spinner>
+
+

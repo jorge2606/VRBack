@@ -1,0 +1,308 @@
+﻿@model VR.Dto.SolicitationSubsidyForTemplateDto
+@{
+    decimal totalExp = 0;
+    decimal totalDest = 0;
+    decimal priceDay = 0;
+    decimal subTotalDest = 0;
+    decimal total = 0;
+    int amountHolidays = 0;
+    int amountWeekEnds = 0;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .table {
+            font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
+
+        .table td, #table th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        .table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .table tr:hover {
+            background-color: #ddd;
+        }
+
+        .table th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .buttonAccept {
+            background-color: #ABEBC6;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 23px;
+        }
+
+        .buttonAccept:hover {
+            background-color: #2ECC71;
+        }
+
+        .buttonReject {
+            background-color: #D6DBDF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 23px;
+        }
+
+        .buttonReject:hover {
+            background-color: #AEB6BF;
+        }
+
+        .buttonClose {
+            background-color: #AEB6BF;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 16px;
+        }
+
+        .buttonClose:hover {
+            background-color: #D6DBDF;
+        }
+
+        .total {
+            text-align: right;
+            width: 10%;
+        }
+
+        .totalFooter {
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .textArea {
+            width: 100%;
+            resize: none;
+            border-radius: 10px;
+            background-color: #F7F9F9;
+            margin-top: 2px;
+        }
+
+        .footer {
+            float: right;
+            margin-top: 10px;
+        }
+
+        .divTotal {
+            float: right;
+        }
+
+        .container {
+            background-color: white;
+            padding: 10px;
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol","Noto Color Emoji";
+        }
+
+        .amount-td {
+            width: 10%;
+            text-align: right;
+        }
+
+        .name-td {
+            width: 45px;
+        }
+
+        .first-paragraph {
+            text-indent: 28%;
+        }
+
+        .divTableDestinies, .divTableExpenditures {
+            margin-top: 5px;
+        }
+
+        .divForm {
+            border: 2px gray solid;
+            margin-top: 2px;
+            padding: 5px;
+        }
+
+        .divTittle {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            font-size: xx-large;
+        }
+    </style>
+    <meta charset="utf-8" />
+    <title></title>
+</head>
+<body>
+    <div class="container">
+        <p>Sr./Sra. @Model.SupervisorsLastName , @Model.SupervisorsFirstName <br/><p>
+        <p class="first-paragraph">El Agente @Model.User.LastName , @Model.User.FirstName ha enviado una solicitud de viático.</p>
+        <p>Saludos.</p>
+        
+
+        <div class="divForm">
+            @if (@Model.IsRefund)
+            {
+                <div class="divTittle">
+                    Detalle de solicitud reintegro de víatico
+                </div>
+            }
+            else
+            {
+                <div class="divTittle">
+                    Detalle de solicitud de víatico
+                </div>
+            }
+            <h5 class="">
+                Apellido, Nombre : @Model.User.LastName, @Model.User.FirstName <br>
+                C.U.I.L : @Model.User.Dni
+            </h5>
+
+            <div class="">
+                <div class="">
+                    <label for=""><b>Objeto</b></label>
+                    <textarea rows="10"
+                              style="height: 100px"
+                              class="textArea"
+                              disabled>
+                          @Model.Motive
+                </textarea>
+                </div>
+
+                <div class="divTableDestinies">
+                    <label for=""><b>Destinos</b></label>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Fecha de Inicio</th>
+                            <th scope="col">Destino</th>
+                            <th scope="col">Transporte</th>
+                            <th scope="col">Dias</th>
+                            <th scope="col">Dias C/Gastos</th>  
+                            <th scope="col">$/Dia</th>
+                            <th scope="col">Cod. Liq.</th>
+                            <th scope="col" class="amount-td">Subtotal</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var des in Model.Destinies)
+                        {
+                            subTotalDest = 0;
+                            subTotalDest += @des.DaysPay * @des.AdvanceCategory * @des.PercentageCodeLiquidation;
+                            amountWeekEnds += @des.DaysWeekEnd;
+                            amountHolidays += @des.DaysHolidays;
+                            <tr>
+                                <td>
+                                    @des.StartDate.Day/ @des.StartDate.Month/ @des.StartDate.Year
+                                </td>
+                                <td>
+                                    <li style="list-style-type: none;">@((!des.CountryId.HasValue) ? des.Province.Name + ", " + des.City.Name : des.Country.Name) </li>
+                                </td>
+                                <td>
+                                    @des.Transport.Model - @des.Transport.Brand
+                                </td>
+                                <td>
+                                    @des.Days
+                                </td>
+                                <td>
+                                    @des.DaysPay
+                                </td>
+                                <td>
+                                    $ @des.AdvanceCategory
+                                </td>
+                                <td>
+                                    @des.PercentageCodeLiquidation
+                                </td>
+                                <td class="amount-td">
+                                    $ @subTotalDest
+                                </td>
+                            </tr>
+                            totalDest += @subTotalDest;
+                        }
+                        <tr>
+                            <td colspan="8" class=amount-td>
+                                <b>$ @totalDest </b>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="divTableExpenditures">
+                    <label for=""><b>Gastos</b></label>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Descripción</th>
+                            <th scope="col">Importe</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var exp in Model.Expenditures)
+                        {
+                            <tr>
+                                <td class="name-td">
+                                    @exp.ExpenditureTypeName
+                                </td>
+                                <td>
+                                    @exp.Description
+                                </td>
+                                <td class="amount-td">
+                                    @exp.Amount
+                                </td>
+                            </tr>
+                            totalExp += @exp.Amount;
+                        }
+                        <tr class="total">
+                            <td colspan="3"><b>$ @totalExp</b></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="totalFooter">
+
+                    <b>Total : $ @(total += totalExp + totalDest) </b>
+                    <br />
+                    <b>Feriados : @amountHolidays</b>
+                    <br />
+                    <b>Fines de Semana : @amountWeekEnds</b>
+                </div>
+
+                <div class="footer">
+                    <a href="@Model.Url" class="buttonAccept">Aceptar</a>
+                    <button type="submit" class="buttonReject">Rechazar</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+</body>
+</html>

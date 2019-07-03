@@ -1,0 +1,51 @@
+<div class="container col-4">
+    <h2>Registrar</h2>
+    <form (ngSubmit)="userForm.form.valid && onSubmit()" method="post" #userForm="ngForm">
+        <div class="form-group">
+            <input class="form-control" [(ngModel)]="model.dni" maxlength="8" #dni="ngModel" required name="dni" id="dni" type="number"
+                placeholder="Dni">
+            <div style="margin-top: 10px;" *ngIf="dni.invalid && dni.dirty" class="alert alert-danger">
+                Dni Incorrecto
+            </div>
+        </div>
+        <div class="form-group">
+            <input class="form-control" [(ngModel)]="model.email" required #email="ngModel" name="email" type="text"
+                placeholder="email" value="">
+        </div>
+        <div style="margin-top: 10px;" *ngIf="email.dirty && email.invalid" class="alert alert-danger">
+            Email Incorrecto
+        </div>
+        <div class="from-group">
+            <input class="form-control" [(ngModel)]="model.phoneNumber" required #phoneNumber="ngModel" name="phoneNumber"
+                type="text" placeholder="Telefóno" value="">
+        </div>
+        <div style="margin-top: 10px;" *ngIf="phoneNumber.dirty && phoneNumber.invalid" class="alert alert-danger">
+            Telefóno Incorrecto
+        </div>
+
+        <div style="padding-top : 8px;" class="from-group">
+            <input class="form-control" [(ngModel)]="model.password" #password="ngModel" name="password" type="password"
+                placeholder="Contraseña" value="">
+        </div>
+        <div style="margin-top: 10px;" *ngIf="password.dirty && password.invalid" class="alert alert-danger">
+            Password Incorrecto
+        </div>
+
+        <div class="form-group" style="padding-top : 10px;">
+            <button style="margin: 15px;" class="btn btn-success" [disabled]="!userForm.form.valid">Save</button>
+            <a class="btn btn-primary" href="" routerLink="/login">Login</a>
+        </div>
+        
+        <div style="margin-top: 10px;" *ngIf="password.dirty && password.invalid" class="alert alert-danger">
+            Contraseña con caracteres invalidos
+        </div>
+    </form>
+    <div *ngIf="userForm.form.invalid && !userForm.form.dirty">
+        Hay Campos erroneos en el formulario, verifiquelos
+    </div>
+    <div class="">
+        <ul style="margin-top : 15px;" *ngIf="errors.length != 0" class="alert alert-danger" role="alert">
+            <li *ngFor="let error of errors">{{ error.value }}</li>
+        </ul>
+    </div>
+</div>

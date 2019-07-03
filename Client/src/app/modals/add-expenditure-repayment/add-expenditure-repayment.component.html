@@ -1,0 +1,190 @@
+<form (ngSubmit)="addNewConcept()" #addNewExpForm="ngForm" action="">
+
+    <div class="modal-header bg-dark text-white">
+            <h4 class="modal-title">Nuevo concepto de gasto</h4>
+    </div>
+    <div class="modal-body">
+        <div class="container">
+                <div class="form-row">
+                    <div class="form-group col">
+                        <label for="">Gastos</label>
+                        <select 
+                            class="form-control" 
+                            #expenditureId="ngModel"
+                            [ngClass]="{'is-invalid' : expenditureId.invalid && (expenditureId.dirty || expenditureId.touched)}" 
+                            name="expenditureId" 
+                            [(ngModel)]="modelExp.id" 
+                            required>
+                                <option *ngIf="selectedExpenditure == modelExp.id" [ngValue]="selectedExpenditure" disabled>
+                                        Seleccione un concepto...
+                                </option>
+                                <option *ngFor="let exp of expendituresCbox" value="{{exp.id}}">{{exp.name}}</option>
+                        </select>
+
+                        <div *ngIf="expenditureId.invalid && (expenditureId.dirty || expenditureId.touched)" 
+                            class="mt-1">
+                            <div *ngIf="expenditureId.errors.required">
+                                <span style="color:red">Campo requerido.</span> 
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                        <div class="form-group">
+                            <div class="input-group">
+                                <input 
+                                class="form-control" 
+                                placeholder="dd/mm/yyyy"
+                                name="dp" 
+                                [readonly]="true"
+                                type="text"
+                                displayMonths="displayMonths" 
+                                navigation="navigation" 
+                                outsideDays="outsideDays" 
+                                showWeekNumbers="showWeekNumbers"
+                                ngbDatepicker 
+                                #d="ngbDatepicker" 
+                                [(ngModel)]="modelExp.supportingDate"
+                                required>
+                                <div class="input-group-append">
+                                <button class="btn btn-outline-secondary calendar" 
+                                    (click)="d.toggle()" type="button">
+                                    <fa-icon icon="calendar-alt"></fa-icon>
+                                </button>
+                                </div>
+                                <div class="input-group-append">
+                                    <button
+                                        placement="right"
+                                        ngbTooltip="Limpiar"
+                                        class="btn btn-outline-secondary calendar"
+                                        (click)="clear(modelExp)" type="button">
+                                        <fa-icon icon="eraser"></fa-icon>
+                                    </button>
+                                </div>
+                            </div>            
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-4 mb-0">
+                        <label for="">Importe</label>
+                        <input 
+                            [ngClass]="{'is-invalid' : amount.invalid && (amount.dirty || amount.touched)}"
+                            [(ngModel)]="modelExp.amount" 
+                            #amount="ngModel"
+                            placeholder="$0.00" 
+                            name="amount" 
+                            class="form-control text-right" 
+                            value="{{modelExp.amount}}" 
+                            required 
+                            maxlength="8"
+                            required>
+                    </div>
+                    <div class="w-100"></div>
+                    
+                    <div *ngIf="amount.invalid && (amount.dirty || amount.touched)"
+                    class="mt-1">
+                        <div *ngIf="amount.errors.required">
+                            <span style="color:red">Campo requerido.</span>
+                        </div>
+                        <div *ngIf="amount.errors.minlength">
+                            Debe contener al menos un digíto
+                        </div>
+                        <div *ngIf="amount.errors.maxlength">
+                        No debe contener mas de 8 digítos
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col">
+                            <label for="">Descripción</label>
+                            <textarea required [(ngModel)]="modelExp.description" 
+                            #description="ngModel" 
+                            [ngClass]="{'is-invalid' : !(description.invalid && (description.dirty || description.touched)) 
+                            && modelExp.description?.trim().length == 0 || description.invalid && (description.dirty || description.touched)}"
+                            value="{{modelExp.description}}"
+                            placeholder="Ingrese la descripción"
+                            name="description" 
+                            class="form-control" 
+                            [maxlength]="150"
+                            type="text"
+                            style="resize : none;"></textarea>
+                            <div *ngIf="description.maxlength == 149">
+                                Solo se permiten 150 caracteres
+                            </div>
+                            <div *ngIf="!(description.invalid && (description.dirty || description.touched)) 
+                                && modelExp.description?.trim().length == 0" 
+                                class="mt-1">
+                                <span style="color: red">Campo requerido.</span> 
+                            </div>
+                            <div *ngIf="description.invalid && (description.dirty || description.touched)"
+                                class="mt-1">
+                                <div *ngIf="description.errors.required">
+                                    <span style="color: red">Campo requerido.</span> 
+                                </div>
+                                <div *ngIf="description.errors.minlength">
+                                   <span style="color: red">Debe contener al menos un digíto</span>
+                                </div>
+                                <div *ngIf="description.errors.maxlength">
+                                   <span style="color: red">No debe contener mas de 4 digítos</span>
+                                </div>
+                            </div>
+
+                    </div>
+                </div>
+
+                <label for="">Adjuntar comprobante</label>
+                <div class="">
+                        <div *ngIf="!url" class="">
+                            <img src="{{urlImage}}" class="imageUrl m-auto">
+                        </div>
+                        <ul *ngIf="!url" class="p-0 text-center">
+                            <span class="">
+                                <input 
+                                class="inputfile" 
+                                type="file"
+                                name="file" 
+                                id="file" 
+                                (change)="onSelectFile($event)" 
+                                ng2FileSelect
+                                [uploader]="uploader" 
+                                value="Cambiar"/>
+                                <label for="file" 
+                                    class="mt-1" 
+                                    style="left: 27px;">
+                                    <fa-icon class="fa-lg" icon="upload"></fa-icon>
+                                </label>
+                            </span>
+                        </ul>
+
+                        <div *ngIf="url" class="">
+                            <img [src]="url" class="imageUrl m-auto">
+                            <ul class="p-0 text-center mt-1">
+                                    <span class="">
+                                        <a 
+                                            class="mt-1"
+                                            (click)="removePreview()">
+                                            <fa-icon style="color:red;cursor: pointer;" class="fa-lg" icon="trash"></fa-icon>
+                                        </a>
+                                    </span>
+                            </ul>
+                        </div>
+                </div>
+        </div>
+    </div>
+
+    <div *ngIf="msgExist" class="alert alert-danger ml-2 mr-2">
+        {{msgExist}}
+    </div>
+      
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default mr-auto" (click)="activeModal.dismiss('Close click')">Cerrar</button>
+        <button type="submit" class="btn btn-success" [disabled]="!addNewExpForm.valid || !(description.invalid && (description.dirty || description.touched)) 
+        && modelExp.description?.trim().length == 0">Agregar</button>
+      </div>
+
+</form>

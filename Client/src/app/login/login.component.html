@@ -1,0 +1,58 @@
+<div *ngIf="!logout" class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+      
+          <!-- Icon -->
+          <div class="fadeIn first">
+            
+          </div>
+      
+          <!-- Login Form -->
+          <form (ngSubmit)="LoginForm.form.valid && onSubmit()" #LoginForm="ngForm">
+            <input 
+                [(ngModel)]="model.Usuario"
+                type="text" 
+                id="login" 
+                class="fadeIn second" 
+                name="username" 
+                #username="ngModel"
+                placeholder="Usuario"
+                required>
+            <input 
+                [(ngModel)]="model.Password" 
+                placeholder="Contraseña"
+                name="Password" 
+                #password="ngModel"
+                type="password" 
+                id="password" 
+                class="fadeIn third"
+                required>
+            <input type="submit" [disabled]="LoginForm.invalid" class="fadeIn fourth" value="Ingresar">
+          </form>
+      
+          <!-- Remind Passowrd -->
+          <div id="formFooter">
+            <a  class="underlineHover" routerLink="/RecuperarContraseña">¿olvidaste tu contraseña?</a>
+          </div>
+      
+        </div>
+        <div class="alert alert-danger" *ngIf="!LoginForm.valid && LoginForm.submitted">
+                Formulario Incorrecto
+        </div>
+    
+        <div *ngIf="!logout">
+                <ul style="list-style-type: none;" *ngIf="notifications" 
+                    class="alert alert-danger mt-1 mb-0 ml-auto text-center" role="alert">
+                <li *ngFor="let e of notifications">{{ e.value }}</li>
+            </ul>
+        </div>
+</div>
+
+<ngx-spinner 
+  bdColor="rgba(51,51,51,0.8)"
+  size="medium"
+  color="#fff"
+  type="ball-spin-clockwise-fade">
+  <p style="font-size: 20px; color: white">Iniciando Sesión...</p>
+</ngx-spinner>
+

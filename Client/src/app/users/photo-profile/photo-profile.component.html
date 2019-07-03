@@ -1,0 +1,53 @@
+
+<div class="container">
+    <div class="navbar navbar-default">
+        <div class="navbar-header">
+            <h3>Imagen de Perfil</h3>
+        </div>
+    </div>
+
+    <div class="container">
+        <div *ngIf="!url" class="container-image col-md-6">
+            <img src="{{urlImage}}" class="image">
+            <ul class="mt-1 text-center">
+                <a 
+                    class="col-md-5 mt-1" 
+                    (click)="eliminarPerfil()">
+                    <fa-icon style="color:red;cursor: pointer;" class="{{sizeIcon}}" icon="trash"></fa-icon>
+                </a>
+            </ul>
+
+            <input 
+                class="inputfile" 
+                type="file"  
+                name="file" 
+                id="file"
+                (change)="onSelectFile($event)" 
+                ng2FileSelect
+                [uploader]="uploader"
+                value="Cambiar" />
+                    <label for="file" class="btn btn-default" style="left: 27px;cursor: pointer;"> 
+                        <fa-icon class="{{sizeIcon}}" icon="upload"></fa-icon> Elegir un Archivo</label>
+        </div>
+    </div>
+    <div *ngIf="url" class="container-image col-md-6">
+        <img [src]="url" class="imageUrl"> 
+        <ul class="mt-1 text-center">
+            <a 
+                *ngIf="uploader.queue.length == 0"
+                class="col-md-5 mt-1" 
+                (click)="eliminarPerfil()">
+                <fa-icon style="color:red;cursor: pointer;" class="{{sizeIcon}}" icon="trash"></fa-icon>
+            </a>
+        </ul>
+        <ul *ngFor="let item of uploader.queue" class="mt-1 text-center">
+            <a class="col-md-5 mr-1" (click)="removePreview()">
+                <fa-icon style="color:red;cursor: pointer;" class="{{sizeIcon}}" icon="trash"></fa-icon>
+            </a>
+            <a class="col-md-5" (click)="item.upload()" 
+                disabled="item.isReady || item.isUploading || item.isSuccess">
+                <fa-icon style="cursor: pointer;" class="{{sizeIcon}}" icon="upload"></fa-icon>
+            </a>
+        </ul>
+    </div>
+</div>

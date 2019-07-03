@@ -1,0 +1,13 @@
+.is-valid {
+    border-left: 5px solid #42A948; /* green */
+}
+.is-invalid {
+    border-left: 5px solid #dc3545; /* green */
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}

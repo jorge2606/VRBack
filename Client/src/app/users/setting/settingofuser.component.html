@@ -1,0 +1,211 @@
+<!--<a 
+    placement="bottom" 
+    ngbTooltip="Volver al listado de usuarios" 
+    class="btn btn-primary mb-1" href="" routerLink="/users">
+    <fa-icon class="fa-lg" icon="arrow-left"></fa-icon>    
+</a>-->
+<ngb-tabset #t="ngbTabset" (tabChange)="setTitleTab()">
+    <ngb-tab id="tab-selectbyid1" title="Perfil">
+        <ng-template ngbTabContent>
+        
+            <div class="container col-md-6 mt-1">    
+            <div class="card">
+                <h5 class="card-header">Mi Perfil</h5>
+                <div class="card-body">
+                    <form (ngSubmit)="onSubmit()" #userForm="ngForm">
+                        <div style="margin-bottom:5px;" class="form-row">
+                            <div class="col-md-4">
+                                <input 
+                                type='text' 
+                                mask='00-00000000-0'
+                                class="form-control" 
+                                [(ngModel)]="model.dni" 
+                                #dni="ngModel" 
+                                required 
+                                name="Dni"  
+                                type="text"
+                                placeholder="xx-xxxxxxxx-x"
+                                [ngClass]="{ 'is-invalid': (dni.dirty || submitted) && dni.invalid }"
+                                [showMaskTyped] = "true">
+                            </div>
+                        </div>
+
+                        <div style="margin-top: 10px;" 
+                            *ngIf="dni.dirty && !submitted && dni.invalid" 
+                            class="alert alert-danger">
+                            <div *ngIf="dni.errors.required">
+                                El campo 'Dni' no debería estar vacío
+                            </div>
+                        </div>
+                
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input class="form-control" 
+                                [(ngModel)]="model.firstName" 
+                                #firstName="ngModel" 
+                                required name="firstName" 
+                                type="text"
+                                placeholder="Nombre">
+                        </div>
+                
+                        <div style="margin-top: 10px;" *ngIf="submitted && firstName.invalid" clas="alert alert-danger">
+                                Nombre Incorrecto
+                        </div>
+                
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input class="form-control" 
+                                [(ngModel)]="model.lastName" 
+                                #lastName="ngModel" 
+                                required name="lastName" 
+                                type="text"
+                                placeholder="Apellido">
+                        </div>
+                
+                        <div style="margin-top: 10px;" *ngIf="submitted && lastName.invalid" clas="alert alert-danger">
+                                Apellido Incorrecto
+                        </div>  
+                    
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input class="form-control" 
+                                [(ngModel)]="model.userName" 
+                                required 
+                                #Usuario="ngModel" 
+                                name="Usuario" 
+                                type="text"
+                                placeholder="Correo electrónico" 
+                                disabled>
+                        </div>
+                    
+                        <div style="margin-top: 10px;" *ngIf="submitted && Usuario.invalid" class="alert alert-danger">
+                            Usuario Incorrecto
+                        </div>
+                        
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input 
+                                [(ngModel)]="model.password" 
+                                #password="ngModel" 
+                                name="password" 
+                                type="password"
+                                (keyup)="comparePassword()"
+                                class="form-control"
+                                [ngClass]="{
+                                    'is-invalid' : !passwordsAreEquals && !passwordEmpty ,
+                                    'is-valid' : passwordsAreEquals && !passwordEmpty
+                                }"
+                                placeholder="Nueva Contraseña" 
+                                value="">
+                        </div>
+
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input 
+                                class="form-control"
+                                (keyup)="comparePassword()" 
+                                [(ngModel)]="model.repeatPassword" 
+                                [ngClass]="{
+                                    'is-invalid' : !passwordsAreEquals && !passwordEmpty ,
+                                    'is-valid' : passwordsAreEquals && !passwordEmpty
+                                }"
+                                #repeatPassword="ngModel" 
+                                name="repeatPassword" 
+                                type="password"
+                                placeholder="Repetir Contraseña" 
+                                value="">
+                        </div>
+                        
+                        <div 
+                            style="margin-top: 10px;" 
+                            *ngIf="" 
+                            class="alert alert-danger">
+                            Las contraseñas no coinciden
+                        </div>
+                    
+                        <div *ngIf="editRol" class="form-group" style="margin-bottom : 0px;">
+                            <div class="form-row ml-0">
+                                <div *ngFor="let rol of model.rolesUser" class="custom-control custom-checkbox mr-2">
+                                    <input 
+                                        name="{{rol.id}}" 
+                                        value="{{rol.id}}" 
+                                        [(ngModel)]="rol.rolBelongUser" 
+                                        type="checkbox" 
+                                        class="custom-control-input" 
+                                        (click)="changeStateCheckbox(rol)"
+                                        [ngClass]="{'is-invalid' : !validCheckbox}"
+                                        id="customControlValidation{{rol.id}}">
+                                    <label class="custom-control-label" for="customControlValidation{{rol.id}}">{{rol.name}}</label>
+                                </div>
+                            </div>
+                        </div> 
+                    
+                        <div style="margin-bottom:5px;" class="form-group">
+                            <input class="form-control" [(ngModel)]="model.phoneNumber" required #PhoneNumber="ngModel" name="phoneNumber"
+                                type="text" placeholder="Telefóno" value="">
+                        </div>
+                        
+                        <div style="margin-top: 10px;" *ngIf="submitted && PhoneNumber.invalid" class="alert alert-danger">
+                            Telefóno Incorrecto
+                        </div>
+
+                        <div class="form-group mb-1">
+                            <select 
+                                class="form-control mt-1" 
+                                #organismId="ngModel" 
+                                name="organismId" 
+                                [(ngModel)]="model.organismId"
+                                (change)="selectDistribution(organismId.value)"
+                                required>
+                                <!--<option class="form-control" *ngIf="selectedorganismId == model.organismId" [ngValue]="selectedorganismId" disabled>
+                                    Seleccione una Organismo...
+                                </option>-->
+                                <option class="form-control" *ngFor="let org of organismList" [ngValue]="org.id">{{org.name}}</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group mb-1">
+                            <select class="form-control mt-1" 
+                                #distributionId="ngModel"
+                                name="distributionId" 
+                                [(ngModel)]="model.distributionId"
+                                required>
+                                <!--<option class="form-control" *ngIf="selecteddistributionId == model.distributionId" [ngValue]="selecteddistributionId" disabled>
+                                    Seleccione una Reparticion...
+                                </option>-->
+                                <option class="form-control" *ngFor="let dist of distributionList" [ngValue]="dist.id">{{dist.name}}</option>
+                            </select>
+                        </div>
+                        
+                        <div style="margin-bottom:5px;" class="form-row">
+                            <button class="btn btn-success ml-auto" [disabled]="!userForm.form.valid">
+                                <fa-icon icon="save"></fa-icon> Guardar
+                            </button>
+                        </div>
+                    
+                    </form>
+                    <div style="margin-top: 10px;" *ngIf="userForm.form.invalid">
+                        Hay Campos erroneos en el formulario, verifiquelos
+                    </div>
+
+                </div>
+            </div>
+            </div>            
+  
+        </ng-template>
+    </ngb-tab>
+    <ngb-tab>
+        <ng-template ngbTabTitle>Imagen</ng-template>
+        <ng-template ngbTabContent>
+            <div class="container col-md-4">
+                <app-photo-profile></app-photo-profile>
+            </div>
+        </ng-template>
+    </ngb-tab>
+    
+    <ngb-tab *ngIf="editSignatureHolograpich">
+        <ng-template ngbTabTitle>Firma Hológrafa</ng-template>
+        <ng-template ngbTabContent>
+            <div class="container col-md-4">
+                <app-holograph-sign></app-holograph-sign>
+            </div>
+        </ng-template>
+    </ngb-tab>
+</ngb-tabset>
+
+

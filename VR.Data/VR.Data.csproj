@@ -1,0 +1,67 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20181205150805_Change name Destinity Destiny1.cs" />
+    <Compile Remove="Migrations\20181221153805_ExpenditureId in Expenditure and refactor table solicitationSubsidy.cs" />
+    <Compile Remove="Migrations\20181221154109_ExpenditureId in Expenditure and refactor table solicitationSubsidy.cs" />
+    <Compile Remove="Migrations\20181221155139_ProvinceId table solicitationSubsidy.cs" />
+    <Compile Remove="Migrations\20181221155541_ProvinceId table solicitationSubsidy.cs" />
+    <Compile Remove="Migrations\20181221160223_ProvinceId table solicitationSubsidy.cs" />
+    <Compile Remove="Migrations\20181226122708_new properties in table province PlaceId and remove InOutProvince property.cs" />
+    <Compile Remove="Migrations\20190102163749_add fields to Destiny.cs" />
+    <Compile Remove="Migrations\20190102170031_add fields to Destiny.cs" />
+    <Compile Remove="Migrations\20190102170136_add fields to Destiny.cs" />
+    <Compile Remove="Migrations\20190102195628_add field New fields to table Expenditure.cs" />
+    <Compile Remove="Migrations\20190102202452_remove field description from table ExpenditureType.cs" />
+    <Compile Remove="Migrations\20190108160224_add table Supervisor to DbContext.cs" />
+    <Compile Remove="Migrations\20190108160416_add table Supervisor to DbContext.cs" />
+    <Compile Remove="Migrations\20190108200246_add AgentFK from table Supervisor.cs" />
+    <Compile Remove="Migrations\20190108200613_add AgentFK from table Supervisor.cs" />
+    <Compile Remove="Migrations\20190108201932_add AgentFK from table Supervisor.cs" />
+    <Compile Remove="Migrations\20190118140249_add table SupplemetaryCity.cs" />
+    <Compile Remove="Migrations\20190122124910_add field Order to Category Table.cs" />
+    <Compile Remove="Migrations\20190122133851_add field CategoryId to User Table.cs" />
+    <Compile Remove="Migrations\20190122134737_add field CategoryId to User Table.cs" />
+    <Compile Remove="Migrations\20190122134953_add field CategoryId to User Table.cs" />
+    <Compile Remove="Migrations\20190207171221_add solicitationSubsidy Obj property to Notifications.cs" />
+    <Compile Remove="Migrations\20190207171906_add solicitationSubsidy Obj property to Notifications.cs" />
+    <Compile Remove="Migrations\20190212195226_List-Users to Distribution.cs" />
+    <Compile Remove="Migrations\20190215204022_add prefix and suffix from users table.cs" />
+    <Compile Remove="Migrations\20190215204212_add prefix and suffix from users table.cs" />
+    <Compile Remove="Migrations\20190215204856_first migration.cs" />
+    <Compile Remove="Migrations\20190227181229_files image to byte.cs" />
+    <Compile Remove="Migrations\20190227181430_files image to byte.cs" />
+    <Compile Remove="Migrations\20190227184200_files image to byte.cs" />
+    <Compile Remove="Migrations\20190227184905_files image to byte file table1.cs" />
+    <Compile Remove="Migrations\20190227185703_files image to byte file table1.cs" />
+    <Compile Remove="Migrations\20190227185930_files image to byte file table1.cs" />
+    <Compile Remove="Migrations\20190327144944_add userId to Table User.cs" />
+    <Compile Remove="Migrations\20190605153521_to run migration in new branch.cs" />
+    <Compile Remove="Migrations\20190605153755_to run migration in new branch.cs" />
+    <Compile Remove="Migrations\20190607150424_add LegalRulingId To SolicitationSubsidy.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Audit.EntityFramework.Identity.Core" Version="13.3.0" />
+    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="SixLabors.ImageSharp" Version="1.0.0-beta0005" />
+    <PackageReference Include="Snickler.EFCore" Version="1.0.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Audit.Entity\Audit.Entity.csproj" />
+    <ProjectReference Include="..\Service.Common\Service.Common.csproj" />
+    <ProjectReference Include="..\VR.Common\VR.Common.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="Microsoft.EntityFrameworkCore.SqlServer">
+      <HintPath>C:\Program Files\dotnet\sdk\NuGetFallbackFolder\microsoft.entityframeworkcore.sqlserver\2.1.1\lib\netstandard2.0\Microsoft.EntityFrameworkCore.SqlServer.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

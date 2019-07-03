@@ -1,0 +1,24 @@
+<div class="m-2">
+    <div class="form-row ml-1 mb-2">
+      <a href="" 
+        routerLink="/roles/create"
+        class="btn btn-success">
+        <fa-icon icon="plus"></fa-icon> Nuevo
+      </a>
+    </div>
+    <table class="table table-striped responsive">
+        <thead>
+          <tr>
+            <th scope="col">Roles</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let rol of modelRoles">
+            <td>{{rol.normalizedName}}</td>
+            <td class="text-center"><a placement="bottom" ngbTooltip="Ver permisos de este rol" routerLink="/roles/permissions/{{rol.id}}/{{rol.normalizedName}}">Permisos</a></td>
+          </tr>
+        </tbody>
+    </table>
+</div>
+
